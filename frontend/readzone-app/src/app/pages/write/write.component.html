@@ -1,0 +1,37 @@
+<form (ngSubmit)="publishPost()" #postForm="ngForm" class="editor-container">
+  <div class="top-bar">
+    <div class="logo">ReadZone</div>
+    <div class="draft-info">Create a new post</div>
+    <div class="actions">
+      <select class="category-select" [(ngModel)]="category" name="category" required>
+        <option value="" disabled selected>Category</option>
+        <option value="technology">Technology</option>
+        <option value="lifestyle">Lifestyle</option>
+        <option value="health">Health</option>
+        <option value="education">Education</option>
+      </select>
+      <button type="submit" class="publish-button">Publish</button>
+      <div class="profile-icon">
+        <img src="/avatar.png" alt="User Avatar" class="avatar" />
+      </div>
+    </div>
+  </div>
+
+  <div class="main-editor">
+    <input
+      type="text"
+      class="post-title"
+      [(ngModel)]="title"
+      name="title"
+      placeholder="Title"
+      required
+    />
+    <textarea
+      class="story-input"
+      [(ngModel)]="content"
+      name="content"
+      placeholder="Tell your story..."
+      required
+    ></textarea>
+  </div>
+</form>

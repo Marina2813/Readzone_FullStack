@@ -1,0 +1,20 @@
+<app-navbar></app-navbar>
+      
+<section class="all-posts">
+  <div *ngFor="let post of posts" class="post-card-container">
+    <a [routerLink]="['/post', post.id]" class="post-card">
+      <img [src]="post.imageUrl" alt="Post image">
+      <div class="post-info">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.description }}</p>
+        <div class="post-meta">
+          <span>📅 {{ post.date }}</span>
+          <span>💬 {{ post.comments }}</span>
+          <span>👏 {{ post.likes }}</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+<app-footer></app-footer>
+

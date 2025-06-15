@@ -1,0 +1,25 @@
+<app-navbar></app-navbar>
+<ng-container *ngIf="post; else loadingOrError">
+<main class="post-container" *ngIf="post">
+    <a routerLink="/all-post"class="back-link">← Back to all posts</a>
+
+    <h1 class="post-title">{{ post.title }}</h1>
+    <p>{{ post.content.substring(0, 120) }}....</p>
+
+    <div class="post-meta">
+      <span>By <strong>{{ post.user?.username || 'Unknown' }}</strong></span> •
+    <span>{{ post.createdDate | date: 'mediumDate' }}</span>
+    </div>
+
+    <img src="/post1.jpg" alt="Featured image" class="post-image" />
+
+    <div class="post-content">
+      <p>{{ post.content }}</p>
+    </div>
+  </main>
+</ng-container>
+<ng-template #loadingOrError>
+  <p *ngIf="loading">Loading post...</p>
+  <p *ngIf="error">{{ error }}</p>
+</ng-template>
+  <app-footer></app-footer>

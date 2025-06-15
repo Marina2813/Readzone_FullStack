@@ -1,0 +1,17 @@
+<div class="login-page">
+  <div class="login-background"></div>
+  <div class="overlay1"></div>
+<div class="auth-container">
+    <div class="auth-box">
+      <div class="site-title">ReadZone</div>
+      <h1>Create Account</h1>
+      <p>Join the journey and start writing 🌿</p>
+      <form (ngSubmit)="onSignup()">
+        <input type="text" placeholder="Username" [(ngModel)]="username" name="username" required />
+        <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required />
+        <input type="password" placeholder="Password" [(ngModel)]="password" name="password" required />
+        <button type="submit">Register</button>
+        <p class="switch-text">Already have an account? <a routerLink="/login">Log in</a></p>
+      </form>
+    </div>
+  </div></div>
