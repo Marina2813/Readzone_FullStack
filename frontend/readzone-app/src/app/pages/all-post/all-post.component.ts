@@ -30,8 +30,7 @@ export class AllPostComponent implements OnInit {
       next: (data) => {
         console.log('[DEBUG] Posts fetched:', data);
         this.posts = data;
-
-        // Fetch like & comment counts for each post
+        
         this.posts.forEach(post => {
           this.getLikeCount(post.postId);
           this.getCommentCount(post.postId);

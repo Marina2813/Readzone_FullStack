@@ -16,7 +16,7 @@
         <div class="post-list">
           <div class="user-post-card" *ngFor="let post of userPosts" (click)="goToPost(post.postId)">
             <h3>{{ post.title }}</h3>
-            <p>{{ post.content?.split('.')?.[0] || 'No description available.' }}</p>
+            <p>{{ getTagline(post.content?.split('.')?.[0] || 'No description available.' ) }}</p>
 
             <div class="card-bottom-row" (click)="$event.stopPropagation()">
              <div class="meta-info">

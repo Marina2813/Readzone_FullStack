@@ -1,0 +1,35 @@
+<app-navbar></app-navbar>
+
+<section class="search-results">
+  <div *ngIf="!query" class="search-message">
+    <p>Please enter a search query.</p>
+  </div>
+
+  <div *ngIf="query">
+    <h2 class="search-heading">Search Results for: "{{ query }}"</h2>
+
+    <div *ngIf="results.length > 0; else noResults">
+      <div *ngFor="let post of results" class="post-card-container">
+        <a [routerLink]="['/post', post.postId]" class="post-card">
+          <img src="/post1.jpg" alt="Featured image" class="post-image" />
+          <div class="post-info">
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.content?.split('.')?.[0] || 'No description available.' }}</p>
+            <div class="post-meta">
+              <span>👤 {{ post.user?.username || 'Unknown' }}</span>
+              <span>📅 {{ post.createdDate | date: 'mediumDate' }}</span>
+              <span>👏 {{ post.likeCount || 0 }}</span>
+              <span>💬 {{ post.commentCount || 0 }}</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <ng-template #noResults>
+      <p class="no-results">No matching posts found.</p>
+    </ng-template>
+  </div>
+</section>
+
+<app-footer></app-footer>

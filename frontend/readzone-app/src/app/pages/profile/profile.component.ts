@@ -90,4 +90,12 @@ export class ProfileComponent {
     this.router.navigate(['/post', postId]);
   }
 
+  getTagline(htmlContent: string): string {
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = htmlContent || '';
+  const text = tempDiv.textContent || tempDiv.innerText || '';
+  const firstSentence = text.split('. ')[0];
+  return firstSentence.endsWith('.') ? firstSentence : firstSentence + '.';
+}
+
 }

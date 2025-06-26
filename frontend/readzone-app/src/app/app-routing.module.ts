@@ -10,6 +10,7 @@ import { PostDetailComponent } from './pages/post-detail/post-detail.component';
 import { EditPostComponent } from './pages/edit-post/edit-post.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { AllPostComponent } from './pages/all-post/all-post.component';
+import { SearchComponent } from './pages/search/search.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'edit/:id', component: EditPostComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'all-post', component: AllPostComponent},
+  { path: 'search', component: SearchComponent },
   { path: '**', redirectTo: '' }, 
 ];
 @NgModule({

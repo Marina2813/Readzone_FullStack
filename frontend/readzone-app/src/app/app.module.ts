@@ -20,6 +20,7 @@ import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password
 import { AllPostComponent } from './pages/all-post/all-post.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { SearchComponent } from './pages/search/search.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: 'edit/:id', component: EditPostComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'all-post', component: AllPostComponent},
+  { path: 'search', component: SearchComponent },
   { path: '**', redirectTo: '' }, 
 ];
 
@@ -44,7 +46,9 @@ const routes: Routes = [
     PostDetailComponent,
     ForgotPasswordComponent,
     AllPostComponent,
-    FooterComponent
+    FooterComponent,
+
+    
   ],
   imports: [
     FormsModule,
@@ -55,10 +59,11 @@ const routes: Routes = [
     ProfileComponent,
     NavbarComponent,
     EditPostComponent,
+    SearchComponent,
     HttpClientModule,
     [RouterModule.forRoot(routes)]
   ],
-  exports: [RouterModule],
+  exports: [RouterModule, FooterComponent],
   providers: [
     {
     provide: HTTP_INTERCEPTORS,
