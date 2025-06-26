@@ -7,7 +7,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   providers: [AuthService],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
@@ -16,10 +16,42 @@ export class SignupComponent {
   username = "";
   email = '';
   password = '';
+  confirmPassword = '';
+  errorMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  
+  validateEmail(email: string): boolean {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email) && email.length <= 255;
+  }
+
+  validatePassword(password: string): boolean {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,50}$/;
+    return regex.test(password);
+  }
+
   onSignup() {
+
+    if (!this.username.trim()) {
+      this.errorMessage = 'Username cannot be empty.';
+      return;
+    }
+    if (!this.validateEmail(this.email)) {
+      this.errorMessage = 'Please enter a valid email (max 255 characters).';
+      return;
+    }
+    if (!this.validatePassword(this.password)) {
+      this.errorMessage =
+        'Password must be 8-50 characters long and include uppercase, lowercase, number, and special character.';
+      return;
+    }
+    if (this.password !== this.confirmPassword) {
+      this.errorMessage = 'Passwords do not match.';
+      return;
+    }
+
     const newUser = {
       email: this.email,
       passwordHash: this.password,
@@ -33,20 +65,18 @@ export class SignupComponent {
       },
       error: (err) => {
         console.error('Registration error:', err);
-  let message = 'Registration failed!';
-  if (err.error) {
+        let message = 'Registration failed!';
+        if (err.error) {
+          if (typeof err.error === 'string') {
+            message = err.error;
+          }
+          else if (err.error.message) {
+            message = err.error.message;
+          } 
     
-    if (typeof err.error === 'string') {
-      message = err.error;
-    }
-    
-    else if (err.error.message) {
-      message = err.error.message;
-    } 
-    
-    else if (typeof err.error === 'object') {
-      message = JSON.stringify(err.error);
-    }
+        else if (typeof err.error === 'object') {
+          message = JSON.stringify(err.error);
+        }
   }
   alert(message);
       }

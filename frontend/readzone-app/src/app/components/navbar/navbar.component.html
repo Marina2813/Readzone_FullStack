@@ -25,15 +25,15 @@
         </button>
       </div>
       <div class="profile-dropdown">
-        <input type="checkbox" id="toggleDropdown" hidden>
-        <label for="toggleDropdown" class="avatar-label">
+        
+        <div class="avatar-label" (click)="toggleDropdown()">
           <img src="/avatar.png" alt="User Avatar" class="avatar">
-        </label>
+        </div>
       
-        <div class="dropdown-menu">
-            <a routerLink="/profile">My Profile</a>
+        <div class="dropdown-menu" *ngIf="isDropdownOpen">
+            <a routerLink="/profile" class="dropdown-button">My Profile</a>
             <a routerLink="#">Settings</a>
-            <a routerLink="#">Logout</a>
+            <a (click)="logout()" class="dropdown-button">Logout</a>
         </div>
       </div>
       

@@ -74,5 +74,29 @@ namespace WebApplication1.Controllers
 
             return Ok(new { token = jwt });
         }
+
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            return Ok(new { username = user.Username });
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            user.PasswordHash = dto.NewPassword;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Password updated successfully" });
+        }
+
     }
 }

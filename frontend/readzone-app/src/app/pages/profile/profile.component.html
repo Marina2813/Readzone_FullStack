@@ -1,51 +1,42 @@
 <body>
   <app-navbar></app-navbar>
-<div class="main-container ">
-  <section class="profile-section">
-    <div class="profile-header">
-      <img src="/avatar.png" alt="Profile Picture" class="profile-pic" />
-      <div class="user-info">
-        <h1 class="username">Jane Doe</h1>
-        <p class="bio">Aspiring writer | Lover of coffee, Technology, and good stories ✨</p>
-        <button class="edit-btn">Edit Profile</button>
+  <div class="main-container">
+    <section class="profile-section">
+      <div class="profile-header">
+        <img src="/avatar.png" alt="Profile Picture" class="profile-pic" />
+        <div class="user-info">
+          <h1 class="username">{{userName}}</h1>
+          <p class="bio">Aspiring writer | Lover of coffee, Technology, and good stories ✨</p>
+          <button class="edit-btn">Edit Profile</button>
+        </div>
       </div>
-    </div>
 
-    <div class="user-posts">
-      <h2>Your Posts</h2>
-      <div class="post-list">
-        <div class="user-post-card">
-          <h3>My Journey Through Minimalism</h3>
-          <p>A short piece on the joy of decluttering and simple living.</p>
-          <span>📅 Mar 28, 2025</span>
+      <div class="user-posts">
+        <h2>Your Posts</h2>
+        <div class="post-list">
+          <div class="user-post-card" *ngFor="let post of userPosts" (click)="goToPost(post.postId)">
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.content?.split('.')?.[0] || 'No description available.' }}</p>
 
-          <div class="card-actions">
-            <button class="icon-btn" title="Edit">
-              <a href="edit.html"><img src="/edit.png" alt="Edit" /></a>
+            <div class="card-bottom-row" (click)="$event.stopPropagation()">
+             <div class="meta-info">
+              <span>👤 {{ post.user?.username || 'Unknown' }}</span>
+              <span>📅 {{ post.createdDate | date }}</span>
+            </div>
+
+
+            <div class="card-actions">
+              <button class="icon-btn" title="Edit" (click)="editPost(post.postId)">
+                <img src="/edit.png" alt="Edit" />
               </button>
-              <button class="icon-btn" title="Delete">
+              <button class="icon-btn" title="Delete" (click)="deletePost(post.postId)">
                 <img src="/delete.png" alt="Delete" />
               </button>
+            </div>
+            </div>
           </div>
         </div>
-        <div class="user-post-card">
-          <h3>Why Writing Heals</h3>
-          <p>Reflections on using writing as a tool for self-discovery.</p>
-          <span>📅 Apr 5, 2025</span>
-
-          <div class="card-actions">
-            <button class="icon-btn" title="Edit">
-                <a routerLink="/edit-post"><img src="/edit.png" alt="Edit" /></a>
-              </button>
-              <button class="icon-btn" title="Delete">
-                <img src="/delete.png" alt="Delete" />
-              </button>
-          </div>
-        </div>
-        
       </div>
-    </div>
-  </section>
+    </section>
   </div>
 </body>
-

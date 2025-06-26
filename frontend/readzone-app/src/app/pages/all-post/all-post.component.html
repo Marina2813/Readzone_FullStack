@@ -1,20 +1,27 @@
 <app-navbar></app-navbar>
       
 <section class="all-posts">
+  <div *ngIf="loading">Loading posts...</div>
+  <div *ngIf="error">{{ error }}</div>
+  
+  <div *ngIf="!loading && posts.length > 0">
   <div *ngFor="let post of posts" class="post-card-container">
-    <a [routerLink]="['/post', post.id]" class="post-card">
-      <img [src]="post.imageUrl" alt="Post image">
+    <a [routerLink]="['/post', post.postId]" class="post-card">
+      <img src="/post1.jpg" alt="Featured image" class="post-image" />
       <div class="post-info">
         <h2>{{ post.title }}</h2>
-        <p>{{ post.description }}</p>
+        <p>{{ getTagline(post.content?.split('.')?.[0] || 'No description available.' ) }}</p>
         <div class="post-meta">
-          <span>📅 {{ post.date }}</span>
-          <span>💬 {{ post.comments }}</span>
-          <span>👏 {{ post.likes }}</span>
+          <span>👤 {{ post.user?.username || 'Unknown' }}</span>
+          <span>📅 {{ post.createdDate | date:'mediumDate'}}</span>
+          <span>💬 {{ post.commentCount || 0 }}</span>
+          <span>👏 {{ post.likeCount || 0}}</span>
         </div>
       </div>
     </a>
   </div>
+  </div>
 </section>
+
 <app-footer></app-footer>
 

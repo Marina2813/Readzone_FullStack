@@ -4,18 +4,58 @@
     <a routerLink="/all-post"class="back-link">← Back to all posts</a>
 
     <h1 class="post-title">{{ post.title }}</h1>
-    <p>{{ post.content.substring(0, 120) }}....</p>
+    <p>{{ getTagline(post.content?.split('.')?.[0])}}.</p>
 
     <div class="post-meta">
       <span>By <strong>{{ post.user?.username || 'Unknown' }}</strong></span> •
     <span>{{ post.createdDate | date: 'mediumDate' }}</span>
     </div>
 
+    <div class="like-container">
+  <span 
+    class="heart-icon" 
+    [class.liked]="userLiked" 
+    (click)="toggleLike()">
+    ♥
+  </span>
+  <span class="like-count">{{ likeCount }}</span>
+</div>
+
     <img src="/post1.jpg" alt="Featured image" class="post-image" />
 
     <div class="post-content">
-      <p>{{ post.content }}</p>
+      <p [innerHTML]="getFormattedContent(post.content)"></p>
     </div>
+
+<div class="comments-section">
+  <h3>Responses</h3>
+
+  <div class="comment-input">
+    <textarea [(ngModel)]="newComment.content"
+              placeholder="What are your thoughts?"
+              rows="1"
+              (focus)="expandTextarea($event)"
+              (blur)="shrinkTextarea($event)">
+    </textarea>
+    <button (click)="addComment()" [disabled]="!newComment.content?.trim()">Post</button>
+  </div>
+
+  <div *ngFor="let comment of comments" class="comment-card">
+    <div class="comment-header">
+      <span class="comment-author">{{ comment.name }}</span>
+      <span class="comment-date">{{ comment.timestamp | date:'MMM d, y · HH:mm'  }}</span>
+    </div>
+    <p class="comment-content">{{ comment.content }}</p>
+
+    <button *ngIf="comment.isOwner"
+            class="delete-btn"
+            (click)="deleteComment(comment.commentId)">
+      Delete
+    </button>
+  </div>
+</div>
+
+
   </main>
 </ng-container>
 <ng-template #loadingOrError>

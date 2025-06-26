@@ -3,7 +3,13 @@
     <div class="logo">ReadZone</div>
     <div class="draft-info">Create a new post</div>
     <div class="actions">
-      <select class="category-select" [(ngModel)]="category" name="category" required>
+      <select
+        class="category-select"
+        [(ngModel)]="category"
+        [ngModelOptions]="{ standalone: true }"
+        name="category"
+        required
+      >
         <option value="" disabled selected>Category</option>
         <option value="technology">Technology</option>
         <option value="lifestyle">Lifestyle</option>
@@ -22,16 +28,22 @@
       type="text"
       class="post-title"
       [(ngModel)]="title"
+      [ngModelOptions]="{ standalone: true }"
       name="title"
       placeholder="Title"
       required
     />
-    <textarea
+
+    <ngx-editor-menu [editor]="editor"></ngx-editor-menu>
+
+    <ngx-editor
       class="story-input"
       [(ngModel)]="content"
+      [ngModelOptions]="{ standalone: true }"
+      [editor]="editor"
       name="content"
       placeholder="Tell your story..."
       required
-    ></textarea>
+    ></ngx-editor>
   </div>
 </form>

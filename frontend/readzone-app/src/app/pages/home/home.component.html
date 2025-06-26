@@ -1,56 +1,28 @@
 
-  <header class="hero-section bg-landing">
-    <div class="overlay">
-      <app-navbar></app-navbar>
-      <div class="hero-text">
-        <h1>Discover New Perspectives</h1>
-        <p>Explore insightful articles, share your thoughts, and connect with curious minds.</p>
-      </div>
+<header class="hero-section bg-landing">
+  <div class="overlay">
+    <app-navbar></app-navbar>
+    <div class="hero-text">
+      <h1>Discover New Perspectives</h1>
+      <p>Explore insightful articles, share your thoughts, and connect with curious minds.</p>
     </div>
-  </header>
-  <div class="scroll-down">↓</div>
-  
+  </div>
+</header>
+<div class="scroll-down">↓</div>
+   
+<section class="featured-posts-section">
+  <h2>Featured Posts</h2>
+  <div class="featured-posts-container">
+    <div class="featured-post" *ngFor="let post of featuredPosts">
+      <a [routerLink]="['/post', post.postId]">
+        <h3>{{ post.title }}</h3>
+        <p class="category"><i class="fa-solid fa-heart"></i>Category: {{ post.category || 'Anonymous' }}</p>
+      </a>
+    </div>
+  </div>
+  <div class="view-all-container">
+    <a routerLink="/all-post" class="view-all-btn">View All</a>
+  </div>
+</section>
 
-  
-  <section class="featured-posts-section">
-    <h2>Featured Posts</h2>
-    <div class="featured-posts-container">
-      <div class="featured-post">
-        <h3>Finding Peace in Chaos</h3>
-        <p>A reflection on staying grounded in today’s world.</p>
-        <p class="category">Category: Lifestyle</p>
-      </div>
-      <div class="featured-post">
-        <h3>The Future of Clean Energy</h3>
-        <p>What’s next in our path toward sustainability?</p>
-        <p class="category">Category: Technology</p>
-      </div>
-      <div class="featured-post">
-        <h3>Mindfulness for Beginners</h3>
-        <p>Simple techniques for staying present and aware.</p>
-        <p class="category">Category: Health</p>
-      </div>
-      <div class="featured-post">
-        <h3>Mastering Remote Work</h3>
-        <p>Tips and tools to thrive in a remote work environment.</p>
-        <p class="category">Category: Productivity</p>
-      </div>
-      <div class="featured-post">
-        <h3>Creative Writing Hacks</h3>
-        <p>Unlock your storytelling potential with these tips.</p>
-        <p class="category">Category: Writing</p>
-      </div>
-      <div class="featured-post">
-        <h3>Exploring Digital Minimalism</h3>
-        <p>Less screen time, more life: why digital detox matters.</p>
-        <p class="category">Category: Lifestyle</p>
-      </div>
-    </div>
-    <div class="view-all-container">
-        <a routerLink="/all-post" clas="view-all-btn">View All</a>
-    </div>
-  </section>
-  
-
-  
-  <app-footer></app-footer>
+<app-footer></app-footer>

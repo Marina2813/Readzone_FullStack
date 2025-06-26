@@ -60,3 +60,112 @@
     text-decoration: underline;
   }
   
+  .comments-section {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.comment-input {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+}
+
+.comment-input textarea {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: none;
+  transition: all 0.3s ease;
+}
+
+.comment-input textarea:focus {
+  outline: none;
+  border-color: #999;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  min-height: 80px;
+}
+
+.comment-input button {
+  align-self: flex-end;
+  padding: 0.5rem 1rem;
+  background-color: #1b3b5f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.comment-input button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.comment-card {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #333;
+}
+
+.comment-content {
+  font-size: 1rem;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.delete-btn {
+  background: transparent;
+  color: crimson;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0;
+}
+
+.like-container {
+  margin: 1rem 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.2rem;
+}
+
+.heart-icon {
+  cursor: pointer;
+  color: #999;
+  font-size: 2rem;
+  transition: color 0.3s ease;
+}
+
+.heart-icon.liked {
+  color: #e63946; 
+}
+
+.heart-icon:hover {
+  color: #e63946;
+}
+
+.like-count {
+  font-weight: 500;
+  color: #1b3b5f;
+}
+

@@ -32,5 +32,22 @@ export class AuthService {
 
     return this.http.get(this.apiUrl, { headers });
   }
+  getUserId(): number | null {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload?.UserId ?? null;
+  } catch (e) {
+    console.error("Failed to decode token", e);
+    return null;
+  }
+}
+
+getUsernameById(userId: number): Observable<{ username: string }> {
+  return this.http.get<{ username: string }>(`https://localhost:7216/api/Auth/user/${userId}`);
+}
+
 
 }

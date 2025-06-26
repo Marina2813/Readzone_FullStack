@@ -1,1 +1,32 @@
-<p>edit-post works!</p>
+<div class="editor-container">
+  <div class="top-bar">
+    <div class="logo">ReadZone</div>
+    <div class="draft-info">Edit Post</div>
+    <div class="actions">
+      <select class="category-select" [(ngModel)]="post.category" required>
+        <option value="technology">Technology</option>
+        <option value="lifestyle">Lifestyle</option>
+        <option value="health">Health</option>
+        <option value="education">Education</option>
+      </select> 
+      <button class="publish-button" (click)="saveChanges()">Save Changes</button>
+      <div class="profile-icon">
+        <img src="/avatar.png" alt="User Avatar" class="avatar" />
+      </div>
+    </div>
+  </div>
+
+  <div class="main-editor">
+    <input
+      class="title-input"
+      type="text"
+      [(ngModel)]="post.title"
+      placeholder="Title"
+    />
+    <textarea
+      class="story-input"
+      [(ngModel)]="post.content"
+      placeholder="Start writing your story..."
+    ></textarea>
+  </div>
+</div>

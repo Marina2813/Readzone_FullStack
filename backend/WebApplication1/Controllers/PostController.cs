@@ -39,7 +39,7 @@ namespace WebApplication1.Controllers
                 return Unauthorized("User not found");
 
             var count = await _context.Posts.CountAsync();
-            post.PostId = $"P-{1000 + count + 1}";
+            post.PostId = $"P-{Guid.NewGuid()}";
             post.UserId = userId;
             post.CreatedDate = DateTime.UtcNow;
 
@@ -54,8 +54,11 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
-            return await _context.Posts.Include(p => p.User).ToListAsync();
-            
+            return await _context.Posts
+            .Include(p => p.User)
+            .OrderByDescending(p => p.CreatedDate)
+            .ToListAsync();
+
         }
 
         [HttpGet("{id}")]
@@ -119,6 +122,26 @@ namespace WebApplication1.Controllers
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
             return NoContent();
+        }
+
+        [HttpGet("myposts")]
+        public async Task<IActionResult> GetUserPosts()
+        {
+            var userEmail = User.Identity?.Name;
+            if (string.IsNullOrEmpty(userEmail))
+                return Unauthorized("Email not found in token");
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
+            if (user == null)
+                return Unauthorized("User not found");
+
+            var posts = await _context.Posts
+                .Where(p => p.UserId == user.Id)
+                .Include(p => p.User)
+                .OrderByDescending(p => p.CreatedDate)
+                .ToListAsync();
+
+            return Ok(posts);
         }
     }
 }

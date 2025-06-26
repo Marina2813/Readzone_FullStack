@@ -2,8 +2,11 @@ import { Component, HostBinding} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgxEditorModule } from 'ngx-editor';
+import { Editor } from 'ngx-editor';
 
 interface PostResponse {
+  
   postId: string;
   title: string;
   content: string;
@@ -17,13 +20,25 @@ interface PostResponse {
   standalone: true,
   templateUrl: './write.component.html',
   styleUrl: './write.component.css',
-  imports: [FormsModule]
+  imports: [
+    FormsModule,
+    NgxEditorModule,
+  ],
 })
 
 export class WriteComponent {
+  editor!: Editor;
   title = '';
   content = '';
   category = '';
+
+  ngOnInit() {
+    this.editor = new Editor();
+  }
+
+  ngOnDestroy() {
+    this.editor.destroy();
+  }
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -42,8 +57,12 @@ export class WriteComponent {
     const postData = {
       title: this.title,
       content: this.content,
-      category: this.category
+      category: this.category,
+      Comments: [],
+      Likes: []
     };
+
+    console.log('Attempting to publish post with:', postData);
 
      this.http.post<PostResponse>('https://localhost:7216/api/post', postData, { headers }).subscribe({
       next: (res) => {
@@ -59,6 +78,7 @@ export class WriteComponent {
       
       error: (err) => {
         console.error('Error publishing post:', err);
+        console.log('Validation Errors:', err.error?.errors); 
         alert('Something went wrong');
       }
     });
