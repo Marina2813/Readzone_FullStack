@@ -143,5 +143,24 @@ namespace WebApplication1.Controllers
 
             return Ok(posts);
         }
+
+        [AllowAnonymous]
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchPosts([FromQuery] string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return BadRequest("Query string cannot be empty.");
+
+            var lowerQuery = query.ToLower();
+
+            var results = await _context.Posts
+                .Where(p => p.Title.ToLower().Contains(lowerQuery) || p.Content.ToLower().Contains(lowerQuery))
+                .Include(p => p.User)
+                .OrderByDescending(p => p.CreatedDate)
+                .ToListAsync();
+
+            return Ok(results);
+        }
+
     }
 }
