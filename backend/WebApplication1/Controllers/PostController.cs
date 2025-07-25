@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using System.Security.Claims;
 using WebApplication1.Data;
 using WebApplication1.Models;
-using System.Security.Claims;
-using Microsoft.Extensions.Hosting;
+using WebApplication1.Services;
 
 
 namespace WebApplication1.Controllers
@@ -15,133 +16,74 @@ namespace WebApplication1.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PostController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IPostService _postService;
 
-        public PostController(AppDbContext context)
+        public PostController(IPostService postService)
         {
-            _context = context;
+            _postService = postService;
         }
+
 
         //create post
         [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> CreatePost([FromBody] Post post)
         {
-            var userIdClaim = User.FindFirst("UserId")?.Value;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdClaim))
                 return Unauthorized("User ID not found in token");
 
             int userId = int.Parse(userIdClaim);
-
-            var userEmail = User.Identity?.Name;
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
-
-            if (user == null)
-                return Unauthorized("User not found");
-
-            var count = await _context.Posts.CountAsync();
-            post.PostId = $"P-{Guid.NewGuid()}";
-            post.UserId = userId;
-            post.CreatedDate = DateTime.UtcNow;
-
-            _context.Posts.Add(post);
-            await _context.SaveChangesAsync();
-
-            return Ok(post);
+            var createdPost = await _postService.CreatePostAsync(post, userId);
+            return Ok(createdPost);
         }
+
 
         // get all posts
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
-            return await _context.Posts
-            .Include(p => p.User)
-            .OrderByDescending(p => p.CreatedDate)
-            .ToListAsync();
-
+            return Ok(await _postService.GetAllPostsAsync());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(string id)
         {
-            Console.WriteLine($"[DEBUG] Angular is asking for PostId = {id}");
-            var post = await _context.Posts.Include(p => p.User).FirstOrDefaultAsync(p => p.PostId == id);
-
-            if (post == null)
-            {
-                Console.WriteLine("[DEBUG] Post not found.");
-                return NotFound();
-            }
-
-            Console.WriteLine($"[DEBUG] Found Post with title: {post.Title}");
-            return post;
+            var post = await _postService.GetPostByIdAsync(id);
+            if (post == null) return NotFound();
+            return Ok(post);
         }
-        
+
 
         // update post
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePost(string id, [FromBody] Post updatedPost)
         {
-            var post = await _context.Posts.FirstOrDefaultAsync(p => p.PostId == id);
-            if (post == null) return NotFound("Post not found");
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (await _postService.UpdatePostAsync(id, updatedPost, userEmail!))
+                return NoContent();
 
-            var userEmail = User.Identity?.Name;
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
-            if (user == null) return Unauthorized("User not found");
-
-            if (post.UserId != user.Id)
-            {
-                return Forbid("You are not allowed to edit this post");
-            }
-            post.Title = updatedPost.Title;
-            post.Content = updatedPost.Content;
-
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Forbid("Unauthorized or Post not found");
         }
 
         // delete post
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(string id)
         {
-            var post = await _context.Posts.FirstOrDefaultAsync(p => p.PostId == id);
-            if (post == null) return NotFound("Post not found");
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            if (await _postService.DeletePostAsync(id, userEmail!))
+                return NoContent();
 
-            var userEmail = User.Identity?.Name;
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
-            if (user == null) return Unauthorized("User not found");
-
-            
-            if (post.UserId != user.Id)
-            {
-                return Forbid("You are not authorized to delete this post");
-            }
-
-            _context.Posts.Remove(post);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            return Forbid("Unauthorized or Post not found");
         }
 
         [HttpGet("myposts")]
         public async Task<IActionResult> GetUserPosts()
         {
-            var userEmail = User.Identity?.Name;
-            if (string.IsNullOrEmpty(userEmail))
-                return Unauthorized("Email not found in token");
-
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
-            if (user == null)
-                return Unauthorized("User not found");
-
-            var posts = await _context.Posts
-                .Where(p => p.UserId == user.Id)
-                .Include(p => p.User)
-                .OrderByDescending(p => p.CreatedDate)
-                .ToListAsync();
-
-            return Ok(posts);
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            return Ok(await _postService.GetUserPostsAsync(userEmail!));
         }
 
         [AllowAnonymous]
@@ -151,15 +93,7 @@ namespace WebApplication1.Controllers
             if (string.IsNullOrWhiteSpace(query))
                 return BadRequest("Query string cannot be empty.");
 
-            var lowerQuery = query.ToLower();
-
-            var results = await _context.Posts
-                .Where(p => p.Title.ToLower().Contains(lowerQuery) || p.Content.ToLower().Contains(lowerQuery))
-                .Include(p => p.User)
-                .OrderByDescending(p => p.CreatedDate)
-                .ToListAsync();
-
-            return Ok(results);
+            return Ok(await _postService.SearchPostsAsync(query));
         }
 
     }

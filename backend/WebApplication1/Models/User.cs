@@ -6,13 +6,13 @@ namespace WebApplication1.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Username { get; set; }
+        public string Username { get; set; } = string.Empty;
 
         [Required]
-        public string Email { get; set; }
+        public required string Email { get; set; } 
 
         [Required]
-        public string PasswordHash { get; set; }
+        public required string Password { get; set; } 
 
     }
 }

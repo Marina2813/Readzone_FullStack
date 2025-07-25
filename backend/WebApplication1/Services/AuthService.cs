@@ -1,46 +1,51 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using WebApplication1.Data;
 using WebApplication1.DTOs;
 using WebApplication1.Models;
+using WebApplication1.Repositories;
+
 
 namespace WebApplication1.Services
 {
-    public class AuthService
+    public class AuthService: IAuthService
     {
-        private readonly AppDbContext _context;
+        private readonly IAuthRepository _authRepository;
         private readonly IConfiguration _config;
+        
 
-        public AuthService(AppDbContext context, IConfiguration config)
+        public AuthService(IAuthRepository authRepository, IConfiguration config)
         {
-            _context = context;
+            _authRepository = authRepository;
             _config = config;
         }
 
         public async Task<string> RegisterAsync(UserDto userDto)
         {
-            if (_context.Users.Any(u => u.Email == userDto.Email))
+            if (await _authRepository.UserExistsAsync(userDto.Email))
                 return "User already exists";
 
             var user = new User
             {
                 Email = userDto.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password)
+                Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password),
+                Username = userDto.Username
             };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            await _authRepository.AddUserAsync(user);
+            await _authRepository.SaveChangesAsync();
 
             return "User registered successfully";
         }
 
-        public async Task<string> LoginAsync(UserDto userDto)
+        public async Task<string> LoginAsync(LoginDto loginDto)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Email == userDto.Email);
+            var user = await _authRepository.GetUserByEmailAsync(loginDto.Email);
 
-            if (user == null || !BCrypt.Net.BCrypt.Verify(userDto.Password, user.PasswordHash))
+            if (user == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password))
                 return "Invalid credentials";
 
             return GenerateJwtToken(user);
@@ -55,10 +60,12 @@ namespace WebApplication1.Services
                 new Claim(ClaimTypes.Name, user.Username)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
+                issuer: _config["JwtSettings:Issuer"],
+                audience: _config["JwtSettings:Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: creds

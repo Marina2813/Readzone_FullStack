@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -12,7 +11,7 @@ namespace WebApplication1.Models
 
         [Required]
         [MaxLength(255)]
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; }
 
         [Required]
         [MaxLength(1000)]
@@ -22,7 +21,7 @@ namespace WebApplication1.Models
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
         [Required]
-        public string PostId { get; set; }
+        public required string PostId { get; set; }
         [JsonIgnore]
         public Post Post { get; set; } = null!;
 
