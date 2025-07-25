@@ -40,7 +40,7 @@ export class PostDetailComponent implements OnInit{
       const token = localStorage.getItem('token'); 
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-      this.http.get<any>(`https://localhost:7216/api/post/${postId}`, { headers }).subscribe({
+      this.http.get<any>(`http://localhost:5213/api/post/${postId}`, { headers }).subscribe({
         next: (res) => {
           console.log('Post fetched:', res);
           this.post = res;
@@ -117,7 +117,7 @@ deleteComment(commentId?: number): void {
   fetchLikeCount(): void {
   if (!this.postId) return;
 
-  this.http.get<number>(`https://localhost:7216/api/like/count/${this.postId}`).subscribe({
+  this.http.get<number>(`http://localhost:5213/api/like/count/${this.postId}`).subscribe({
     next: (count) => {
       this.likeCount = count;
     },
@@ -134,7 +134,7 @@ toggleLike(): void {
     postId: this.postId
   };
 
-  this.http.post(`https://localhost:7216/api/like/toggle`, payload, { headers }).subscribe({
+  this.http.post(`http://localhost:5213/api/like/toggle`, payload, { headers }).subscribe({
     next: () => {
       this.fetchLikeCount(); 
       this.userLiked = !this.userLiked; 
@@ -148,7 +148,7 @@ checkIfUserLiked(): void {
   const token = localStorage.getItem('token');
   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-  this.http.get<boolean>(`https://localhost:7216/api/like/userliked/${this.postId}`, { headers }).subscribe({
+  this.http.get<boolean>(`http://localhost:5213/api/like/userliked/${this.postId}`, { headers }).subscribe({
     next: (liked) => this.userLiked = liked,
     error: (err) => console.error('Error checking user like status:', err)
   });
@@ -170,8 +170,8 @@ getTagline(htmlContent: string): string {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = htmlContent || '';
   const text = tempDiv.textContent || tempDiv.innerText || '';
-  const firstSentence = text.split('. ')[0];
-  return firstSentence.endsWith('.') ? firstSentence : firstSentence + '.';
+  const match = text.match(/.*?[.!?](\s|$)/); 
+  return match ? match[0].trim() : text.trim();
 }
 
 

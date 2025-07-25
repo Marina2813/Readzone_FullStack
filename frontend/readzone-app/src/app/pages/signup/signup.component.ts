@@ -3,11 +3,12 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service'; 
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterModule],
   providers: [AuthService],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
@@ -54,8 +55,8 @@ export class SignupComponent {
 
     const newUser = {
       email: this.email,
-      passwordHash: this.password,
-      username: this.username 
+      password: this.password,
+      username: this.username
     };
 
     this.authService.register(newUser).subscribe({

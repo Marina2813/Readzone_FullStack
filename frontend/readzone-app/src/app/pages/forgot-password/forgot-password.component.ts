@@ -32,7 +32,7 @@ export class ForgotPasswordComponent {
       newPassword: this.newPassword
     };
 
-    this.http.post('https://localhost:7216/api/auth/reset-password', payload).subscribe({
+    this.http.post('http://localhost:5213/api/auth/reset-password', payload).subscribe({
       next: () => {
         this.message = 'Password updated successfully! Redirecting to login...';
         setTimeout(() => this.router.navigate(['/login']), 2000);

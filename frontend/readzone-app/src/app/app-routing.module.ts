@@ -26,6 +26,7 @@ const routes: Routes = [
   { path: 'search', component: SearchComponent },
   { path: '**', redirectTo: '' }, 
 ];
+
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

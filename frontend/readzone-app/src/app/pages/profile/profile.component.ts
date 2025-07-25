@@ -28,11 +28,11 @@ export class ProfileComponent {
 
   ngOnInit(): void {
     this.loadUserPosts();
-    this.loadUsername();
+    //this.loadUsername();
     
   }
   
-  loadUsername(): void {
+  /*loadUsername(): void {
     const userId = this.authService.getUserId();
     if (userId) {
       this.authService.getUsernameById(userId).subscribe({
@@ -45,7 +45,7 @@ export class ProfileComponent {
         }
       });
     }
-  }
+  }*/
 
 
   loadUserPosts(): void {
@@ -58,13 +58,10 @@ export class ProfileComponent {
       next: data => {
         console.log("Fetched posts:", data);
 
-        const userId = this.authService.getUserId();
-        console.log("Current userId:", userId); 
-
-        data.forEach(post => console.log("Post userId:", post.userId));
-
-        this.userPosts = data.filter(post => String(post.userId) === String(userId));
-        console.log("Filtered userPosts:", this.userPosts);
+        this.userPosts = data;
+      if (data.length > 0) {
+        this.userName = data[0].username ?? 'Unknown';
+      }
       },
       error: err => console.error("Failed to fetch posts", err)
     });
@@ -94,8 +91,8 @@ export class ProfileComponent {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = htmlContent || '';
   const text = tempDiv.textContent || tempDiv.innerText || '';
-  const firstSentence = text.split('. ')[0];
-  return firstSentence.endsWith('.') ? firstSentence : firstSentence + '.';
+  const match = text.match(/.*?[.!?](\s|$)/); 
+  return match ? match[0].trim() : text.trim();
 }
 
 }

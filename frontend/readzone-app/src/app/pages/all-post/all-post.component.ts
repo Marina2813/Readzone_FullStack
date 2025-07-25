@@ -26,7 +26,7 @@ export class AllPostComponent implements OnInit {
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.get<any[]>('https://localhost:7216/api/post', { headers }).subscribe({
+    this.http.get<any[]>('http://localhost:5213/api/post', { headers }).subscribe({
       next: (data) => {
         console.log('[DEBUG] Posts fetched:', data);
         this.posts = data;
@@ -47,7 +47,7 @@ export class AllPostComponent implements OnInit {
   }
 
   getLikeCount(postId: string): void {
-    this.http.get<number>(`https://localhost:7216/api/like/count/${postId}`).subscribe({
+    this.http.get<number>(`http://localhost:5213/api/like/count/${postId}`).subscribe({
       next: count => {
         const post = this.posts.find(p => p.postId === postId);
         if (post) post.likeCount = count;
@@ -59,7 +59,7 @@ export class AllPostComponent implements OnInit {
   }
 
   getCommentCount(postId: string): void {
-    this.http.get<number>(`https://localhost:7216/api/comment/count/${postId}`).subscribe({
+    this.http.get<number>(`http://localhost:5213/api/comment/count/${postId}`).subscribe({
       next: count => {
         const post = this.posts.find(p => p.postId === postId);
         if (post) post.commentCount = count;

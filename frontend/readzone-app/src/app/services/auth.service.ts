@@ -6,15 +6,15 @@ import { Observable } from 'rxjs';
 interface User {
   username?: string,
   email: string;
-  passwordHash: string;
+  password: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-
+ 
 export class AuthService {
-  private apiUrl = 'https://localhost:7216/api/Auth'; 
+  private apiUrl = 'http://localhost:5213/api/Auth'; 
 
   constructor(private http: HttpClient) {}
 
@@ -38,7 +38,7 @@ export class AuthService {
 
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload?.UserId ?? null;
+    return payload?.nameid?? null;
   } catch (e) {
     console.error("Failed to decode token", e);
     return null;
@@ -46,7 +46,7 @@ export class AuthService {
 }
 
 getUsernameById(userId: number): Observable<{ username: string }> {
-  return this.http.get<{ username: string }>(`https://localhost:7216/api/Auth/user/${userId}`);
+  return this.http.get<{ username: string }>(`http://localhost:5213/api/Auth/user/${userId}`);
 }
 
 

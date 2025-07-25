@@ -8,7 +8,7 @@
   <div *ngFor="let post of posts" class="post-card-container">
     <a [routerLink]="['/post', post.postId]" class="post-card">
       <img src="/post1.jpg" alt="Featured image" class="post-image" />
-      <div class="post-info">
+      <div class="post-info"> 
         <h2>{{ post.title }}</h2>
         <p>{{ getTagline(post.content?.split('.')?.[0] || 'No description available.' ) }}</p>
         <div class="post-meta">

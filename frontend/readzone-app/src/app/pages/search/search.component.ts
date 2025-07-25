@@ -36,7 +36,7 @@ export class SearchComponent implements OnInit {
   }
 
   searchPosts(): void {
-    this.http.get<any[]>(`https://localhost:7216/api/post/search?query=${encodeURIComponent(this.query)}`).subscribe(posts => {
+    this.http.get<any[]>(`http://localhost:5213/api/post/search?query=${encodeURIComponent(this.query)}`).subscribe(posts => {
       const lower = this.query.toLowerCase();
       this.results = posts.filter(post =>
         post.title.toLowerCase().includes(lower) ||

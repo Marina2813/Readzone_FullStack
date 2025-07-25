@@ -20,7 +20,7 @@
 
             <div class="card-bottom-row" (click)="$event.stopPropagation()">
              <div class="meta-info">
-              <span>👤 {{ post.user?.username || 'Unknown' }}</span>
+              <span>👤 {{ post.username || 'Unknown'}}</span>
               <span>📅 {{ post.createdDate | date }}</span>
             </div>
 

@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit{
   }
 
   loadFeaturedPosts(): void {
-    this.http.get<any[]>('https://localhost:7216/api/post').subscribe({
+    this.http.get<any[]>('http://localhost:5213/api/post').subscribe({
       next: (posts) => {
         this.featuredPosts = posts.slice(0, 6); 
       },

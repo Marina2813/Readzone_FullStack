@@ -1,4 +1,3 @@
-// comment.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -19,7 +18,7 @@ export interface Comment {
 
 @Injectable({ providedIn: 'root' })
 export class CommentService {
-  private apiUrl = 'https://localhost:7216/api/Comment';
+  private apiUrl = 'http://localhost:5213/api/Comment';
 
   constructor(private http: HttpClient) {}
 

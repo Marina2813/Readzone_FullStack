@@ -64,7 +64,7 @@ export class WriteComponent {
 
     console.log('Attempting to publish post with:', postData);
 
-     this.http.post<PostResponse>('https://localhost:7216/api/post', postData, { headers }).subscribe({
+     this.http.post<PostResponse>('http://localhost:5213/api/post', postData, { headers }).subscribe({
       next: (res) => {
         alert('Post published successfully!');
         console.log(res);
