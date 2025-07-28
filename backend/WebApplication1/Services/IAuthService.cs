@@ -6,5 +6,6 @@ namespace WebApplication1.Services
     {
         Task<string> RegisterAsync(UserDto userDto);
         Task<string> LoginAsync(LoginDto loginDto);
+        Task<string> ResetPasswordAsync(ResetPasswordDto dto);
     }
 }

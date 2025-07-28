@@ -2,12 +2,10 @@
 
 namespace WebApplication1.DTOs
 {
-    public class CreateCommentDto
-    {
-
+    public record CreateCommentDto(
         [Required]
         [MaxLength(1000)]
-        public string Content { get; set; } = string.Empty;
-    }
+        string Content
+    );
 
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.Data;
 using WebApplication1.Models;
@@ -24,7 +23,8 @@ public class LikeService : ILikeService
 
         if (existingLike != null)
         {
-            await _likeRepository.RemoveLikeAsync(existingLike);
+            _likeRepository.Remove(existingLike);
+            await _likeRepository.SaveChangesAsync();
         }
         else
         {
@@ -34,7 +34,8 @@ public class LikeService : ILikeService
                 PostId = postId,
                 LikedAt = DateTime.UtcNow
             };
-            await _likeRepository.AddLikeAsync(newLike);
+            await _likeRepository.AddAsync(newLike);
+            await _likeRepository.SaveChangesAsync();
         }
     }
 

@@ -2,11 +2,10 @@
 
 namespace WebApplication1.Repositories
 {
-    public interface IAuthRepository
+    public interface IAuthRepository: IGenericRepository<User>
     {
         Task<User?> GetUserByEmailAsync(string email);
         Task<bool> UserExistsAsync(string email);
-        Task AddUserAsync(User user);
-        Task SaveChangesAsync();
+
     }
 }

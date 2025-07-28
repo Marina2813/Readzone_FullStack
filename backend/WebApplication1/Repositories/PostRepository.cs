@@ -4,19 +4,20 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Repositories
 {
-    public class PostRepository : IPostRepository
+    public class PostRepository : GenericRepository<Post>, IPostRepository
     {
-        private readonly AppDbContext _context;
+        //private readonly AppDbContext _context;
+        private readonly DbSet<User> _users;
 
-        public PostRepository(AppDbContext context)
+        public PostRepository(AppDbContext context): base(context)
         {
-            _context = context;
+            _users = context.Users;
         }
 
-        public async Task AddPostAsync(Post post)
+        /*public async Task AddPostAsync(Post post)
         {
             await _context.Posts.AddAsync(post);
-        }
+        }*/
 
         public async Task<IEnumerable<Post>> GetAllPostsAsync()
         {
@@ -54,7 +55,7 @@ namespace WebApplication1.Repositories
                                        .ToListAsync();
         }
 
-        public void RemovePost(Post post)
+        /*public void RemovePost(Post post)
         {
             _context.Posts.Remove(post);
         }
@@ -62,6 +63,6 @@ namespace WebApplication1.Repositories
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
-        }
+        }*/
     }
 }

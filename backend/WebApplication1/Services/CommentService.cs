@@ -31,7 +31,8 @@ namespace WebApplication1.Services
                 UserId = userId
             };
 
-            await _commentRepository.AddCommentAsync(comment);
+            await _commentRepository.AddAsync(comment);
+            await _commentRepository.SaveChangesAsync();
 
             return new
             {
@@ -47,9 +48,11 @@ namespace WebApplication1.Services
             var comment = await _commentRepository.GetCommentByIdAsync(commentId);
             if (comment == null) return false;
 
-            if (comment.UserId != userId) throw new UnauthorizedAccessException();
+            if (comment.UserId != userId)
+                throw new UnauthorizedAccessException("You are not allowed to delete this comment.");
 
-            return await _commentRepository.DeleteCommentAsync(comment);
+            var deleted = await _commentRepository.DeleteCommentAsync(comment);
+            return deleted;
 
        
         }

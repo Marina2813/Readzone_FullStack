@@ -68,14 +68,12 @@ namespace WebApplication1.Controllers
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
-            if (user == null)
-                return NotFound(new { message = "User not found" });
+            var result = await _authService.ResetPasswordAsync(dto);
 
-            user.Password = dto.NewPassword;
-            await _context.SaveChangesAsync();
+            if (result == "User not found")
+                return NotFound(new { message = result });
 
-            return Ok(new { message = "Password updated successfully" });
+            return Ok(new { message = result });
         }
 
     }

@@ -21,7 +21,7 @@ namespace WebApplication1.Services
             post.UserId = userId;
             post.CreatedDate = DateTime.UtcNow;
 
-            await _repository.AddPostAsync(post);
+            await _repository.AddAsync(post);
             await _repository.SaveChangesAsync();
 
             return post;
@@ -39,7 +39,7 @@ namespace WebApplication1.Services
 
         public async Task<bool> UpdatePostAsync(string postId, Post updatedPost, string userEmail)
         {
-            var post = await _repository.GetPostByIdAsync(postId);
+            var post = await _repository.GetByIdAsync(postId);
             if (post == null) return false;
 
             var user = await _repository.GetUserByEmailAsync(userEmail);
@@ -54,13 +54,13 @@ namespace WebApplication1.Services
 
         public async Task<bool> DeletePostAsync(string postId, string userEmail)
         {
-            var post = await _repository.GetPostByIdAsync(postId);
+            var post = await _repository.GetByIdAsync(postId);
             if (post == null) return false;
 
             var user = await _repository.GetUserByEmailAsync(userEmail);
             if (user == null || post.UserId != user.Id) return false;
 
-            _repository.RemovePost(post);
+            _repository.Remove(post);
             await _repository.SaveChangesAsync();
             return true;
         }

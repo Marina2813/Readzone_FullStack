@@ -35,11 +35,24 @@ namespace WebApplication1.Services
                 Username = userDto.Username
             };
 
-            await _authRepository.AddUserAsync(user);
+            await _authRepository.AddAsync(user);
             await _authRepository.SaveChangesAsync();
 
             return "User registered successfully";
         }
+
+        public async Task<string> ResetPasswordAsync(ResetPasswordDto dto)
+        {
+            var user = await _authRepository.GetUserByEmailAsync(dto.Email);
+            if (user == null)
+                return "User not found";
+
+            user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+            await _authRepository.SaveChangesAsync();
+
+            return "Password updated successfully";
+        }
+
 
         public async Task<string> LoginAsync(LoginDto loginDto)
         {
