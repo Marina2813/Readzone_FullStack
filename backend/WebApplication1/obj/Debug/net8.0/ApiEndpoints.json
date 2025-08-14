@@ -2,7 +2,7 @@
   {
     "ContainingType": "WebApplication1.Controllers.AuthController",
     "Method": "Login",
-    "RelativePath": "api/Auth/login",
+    "RelativePath": "api/v1/Auth/login",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -17,15 +17,31 @@
   },
   {
     "ContainingType": "WebApplication1.Controllers.AuthController",
-    "Method": "Register",
-    "RelativePath": "api/Auth/register",
+    "Method": "RefreshToken",
+    "RelativePath": "api/v1/Auth/refresh-token",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "user",
-        "Type": "WebApplication1.Models.User",
+        "Name": "refreshToken",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApplication1.Controllers.AuthController",
+    "Method": "Register",
+    "RelativePath": "api/v1/Auth/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userDto",
+        "Type": "WebApplication1.DTOs.UserDto",
         "IsRequired": true
       }
     ],
@@ -34,7 +50,7 @@
   {
     "ContainingType": "WebApplication1.Controllers.AuthController",
     "Method": "ResetPassword",
-    "RelativePath": "api/Auth/reset-password",
+    "RelativePath": "api/v1/Auth/reset-password",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -50,7 +66,7 @@
   {
     "ContainingType": "WebApplication1.Controllers.AuthController",
     "Method": "GetUserById",
-    "RelativePath": "api/Auth/user/{id}",
+    "RelativePath": "api/v1/Auth/user/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -66,7 +82,7 @@
   {
     "ContainingType": "WebApplication1.Controllers.CommentController",
     "Method": "DeleteComment",
-    "RelativePath": "api/Comment/{commentId}",
+    "RelativePath": "api/v1/Comment/{commentId}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -82,7 +98,7 @@
   {
     "ContainingType": "WebApplication1.Controllers.CommentController",
     "Method": "AddComment",
-    "RelativePath": "api/Comment/{postId}",
+    "RelativePath": "api/v1/Comment/{postId}",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -103,7 +119,7 @@
   {
     "ContainingType": "WebApplication1.Controllers.CommentController",
     "Method": "GetCommentsForPost",
-    "RelativePath": "api/Comment/{postId}",
+    "RelativePath": "api/v1/Comment/{postId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -119,7 +135,7 @@
   {
     "ContainingType": "WebApplication1.Controllers.CommentController",
     "Method": "GetCommentCount",
-    "RelativePath": "api/Comment/count/{postId}",
+    "RelativePath": "api/v1/Comment/count/{postId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -135,7 +151,7 @@
   {
     "ContainingType": "WebApplication1.Controllers.LikeController",
     "Method": "GetLikeCount",
-    "RelativePath": "api/Like/count/{postId}",
+    "RelativePath": "api/v1/Like/count/{postId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -151,7 +167,7 @@
   {
     "ContainingType": "WebApplication1.Controllers.LikeController",
     "Method": "ToggleLike",
-    "RelativePath": "api/Like/toggle",
+    "RelativePath": "api/v1/Like/toggle",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -167,7 +183,7 @@
   {
     "ContainingType": "WebApplication1.Controllers.LikeController",
     "Method": "UserLiked",
-    "RelativePath": "api/Like/userliked/{postId}",
+    "RelativePath": "api/v1/Like/userliked/{postId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -183,14 +199,14 @@
   {
     "ContainingType": "WebApplication1.Controllers.PostController",
     "Method": "CreatePost",
-    "RelativePath": "api/Post",
+    "RelativePath": "api/v1/Post",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "post",
-        "Type": "WebApplication1.Models.Post",
+        "Name": "dto",
+        "Type": "WebApplication1.DTOs.CreatePostDto",
         "IsRequired": true
       }
     ],
@@ -199,14 +215,30 @@
   {
     "ContainingType": "WebApplication1.Controllers.PostController",
     "Method": "GetPosts",
-    "RelativePath": "api/Post",
+    "RelativePath": "api/v1/Post",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ValidatedPageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[WebApplication1.Models.Post, WebApplication1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "WebApplication1.DTOs.PagedResult\u00601[[WebApplication1.DTOs.PostDto, WebApplication1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -219,7 +251,7 @@
   {
     "ContainingType": "WebApplication1.Controllers.PostController",
     "Method": "GetPost",
-    "RelativePath": "api/Post/{id}",
+    "RelativePath": "api/v1/Post/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -232,7 +264,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "WebApplication1.Models.Post",
+        "Type": "WebApplication1.DTOs.PostDto",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -245,7 +277,7 @@
   {
     "ContainingType": "WebApplication1.Controllers.PostController",
     "Method": "UpdatePost",
-    "RelativePath": "api/Post/{id}",
+    "RelativePath": "api/v1/Post/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -256,8 +288,8 @@
         "IsRequired": true
       },
       {
-        "Name": "updatedPost",
-        "Type": "WebApplication1.Models.Post",
+        "Name": "updatedDto",
+        "Type": "WebApplication1.DTOs.CreatePostDto",
         "IsRequired": true
       }
     ],
@@ -266,7 +298,7 @@
   {
     "ContainingType": "WebApplication1.Controllers.PostController",
     "Method": "DeletePost",
-    "RelativePath": "api/Post/{id}",
+    "RelativePath": "api/v1/Post/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -282,7 +314,7 @@
   {
     "ContainingType": "WebApplication1.Controllers.PostController",
     "Method": "GetUserPosts",
-    "RelativePath": "api/Post/myposts",
+    "RelativePath": "api/v1/Post/myposts",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -292,7 +324,7 @@
   {
     "ContainingType": "WebApplication1.Controllers.PostController",
     "Method": "SearchPosts",
-    "RelativePath": "api/Post/search",
+    "RelativePath": "api/v1/Post/search",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

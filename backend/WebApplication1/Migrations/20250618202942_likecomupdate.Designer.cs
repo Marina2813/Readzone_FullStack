@@ -13,7 +13,7 @@ namespace WebApplication1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20250618202942_likecomupdate")]
-    partial class likecomupdate
+    partial class likeComupdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

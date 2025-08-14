@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
+using WebApplication1.DTOs;
 using WebApplication1.Models;
 
 namespace WebApplication1.Repositories
@@ -19,12 +20,25 @@ namespace WebApplication1.Repositories
             await _context.Posts.AddAsync(post);
         }*/
 
-        public async Task<IEnumerable<Post>> GetAllPostsAsync()
+        public async Task<PagedResult<Post>> GetAllPostsAsync(PaginationParamsDto pagination)
         {
-            return await _context.Posts.Include(p => p.User)
-                                       .OrderByDescending(p => p.CreatedDate)
-                                       .ToListAsync();
+            var query = _context.Posts.Include(p => p.User).OrderByDescending(p => p.CreatedDate);
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .Skip((pagination.PageNumber - 1) * pagination.ValidatedPageSize)
+                .Take(pagination.ValidatedPageSize)
+                .ToListAsync();
+
+            return new PagedResult<Post>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = pagination.PageNumber,
+                PageSize = pagination.ValidatedPageSize
+            };
         }
+
 
         public async Task<Post?> GetPostByIdAsync(string postId)
         {

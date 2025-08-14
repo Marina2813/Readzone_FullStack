@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
+using WebApplication1.DTOs;
 using WebApplication1.Models;
 using WebApplication1.Repositories;
 
@@ -7,73 +9,68 @@ namespace WebApplication1.Services
 {
     public class CommentService: ICommentService
     {
-        private readonly ICommentRepository _commentRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public CommentService(ICommentRepository commentRepository)
+        public CommentService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _commentRepository = commentRepository;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<object> AddCommentAsync(string postId, int userId, string content)
+        public async Task<CommentDto> AddCommentAsync(string postId, int userId, CreateCommentDto dto)
         {
-            var post = await _commentRepository.GetPostByIdAsync(postId);
-            if (post == null) throw new Exception("Post not found");
+            var post = await _unitOfWork.Posts.GetPostByIdAsync(postId)
+                ?? throw new Exception("Post not found");
 
-            var user = await _commentRepository.GetUserByIdAsync(userId);
-            if (user == null) throw new Exception("User not found");
+            var user = await _unitOfWork.Auth.GetByIdAsync(userId)
+                ?? throw new Exception("User not found");
 
-            var comment = new Comment
-            {
-                Name = user.Username,
-                Content = content,
-                Timestamp = DateTime.UtcNow,
-                PostId = postId,
-                UserId = userId
-            };
+            var comment = _mapper.Map<Comment>(dto);
+            comment.Name = user.Username;
+            comment.UserId = userId;
+            comment.PostId = postId;
 
-            await _commentRepository.AddAsync(comment);
-            await _commentRepository.SaveChangesAsync();
+            await _unitOfWork.Comments.AddAsync(comment);
+            await _unitOfWork.SaveChangesAsync();
 
-            return new
-            {
-                comment.CommentId,
-                comment.Name,
-                comment.Content,
-                comment.Timestamp
-            };
+            var commentDto = _mapper.Map<CommentDto>(comment);
+            commentDto.IsOwner = true; ;
+
+            return commentDto;
         }
 
         public async Task<bool> DeleteCommentAsync(int commentId, int userId)
         {
-            var comment = await _commentRepository.GetCommentByIdAsync(commentId);
+            var comment = await _unitOfWork.Comments.GetCommentByIdAsync(commentId);
             if (comment == null) return false;
 
             if (comment.UserId != userId)
                 throw new UnauthorizedAccessException("You are not allowed to delete this comment.");
 
-            var deleted = await _commentRepository.DeleteCommentAsync(comment);
-            return deleted;
+            return await _unitOfWork.Comments.DeleteCommentAsync(comment);
 
-       
+
         }
 
-        public async Task<IEnumerable<object>> GetCommentsForPostAsync(string postId, int? currentUserId)
+        public async Task<IEnumerable<CommentDto>> GetCommentsForPostAsync(string postId, int? currentUserId)
         {
-            var comments = await _commentRepository.GetCommentsForPostAsync(postId);
+            var comments = await _unitOfWork.Comments.GetCommentsForPostAsync(postId);
 
-            return comments.Select(c => new
-            {
-                c.CommentId,
-                c.Name,
-                c.Content,
-                Timestamp = c.Timestamp.ToString("yyyy-MM-dd HH:mm:ss"),
-                IsOwner = currentUserId != null && c.UserId == currentUserId
-            });
+            var commentDtos = comments
+                .Select(c =>
+                {
+                    var dto = _mapper.Map<CommentDto>(c);
+                    dto.IsOwner = currentUserId != null && c.UserId == currentUserId;
+                    return dto;
+                });
+
+            return commentDtos;
         }
 
         public async Task<int> GetCommentCount(string postId)
         {
-            return await _commentRepository.GetCommentCountAsync(postId);
+            return await _unitOfWork.Comments.GetCommentCountAsync(postId);
         }
     }
 }

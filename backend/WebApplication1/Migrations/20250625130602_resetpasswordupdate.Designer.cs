@@ -13,7 +13,7 @@ namespace WebApplication1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20250625130602_resetpasswordupdate")]
-    partial class resetpasswordupdate
+    partial class resetpasswordUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

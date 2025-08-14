@@ -13,7 +13,7 @@ namespace WebApplication1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20250624042154_newaddition")]
-    partial class newaddition
+    partial class newAddition
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

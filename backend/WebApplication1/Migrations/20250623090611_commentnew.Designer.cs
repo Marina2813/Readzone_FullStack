@@ -13,7 +13,7 @@ namespace WebApplication1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20250623090611_commentnew")]
-    partial class commentnew
+    partial class commentNew
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

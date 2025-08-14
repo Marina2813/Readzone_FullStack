@@ -11,7 +11,7 @@ namespace WebApplication1.Models
 
         [Required]
         [MaxLength(255)]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         [Required]
         [MaxLength(1000)]

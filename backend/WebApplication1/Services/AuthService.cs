@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using WebApplication1.Data;
 using WebApplication1.DTOs;
@@ -11,57 +13,79 @@ using WebApplication1.Repositories;
 
 namespace WebApplication1.Services
 {
-    public class AuthService: IAuthService
+    public class AuthService: IAuthService 
     {
-        private readonly IAuthRepository _authRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _config;
-        
+        private readonly IMapper _mapper;
 
-        public AuthService(IAuthRepository authRepository, IConfiguration config)
+        public AuthService(IConfiguration config, IMapper mapper, IUnitOfWork unitOfWork)
         {
-            _authRepository = authRepository;
             _config = config;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<string> RegisterAsync(UserDto userDto)
         {
-            if (await _authRepository.UserExistsAsync(userDto.Email))
+            if (await _unitOfWork.Auth.UserExistsAsync(userDto.Email))
                 return "User already exists";
 
-            var user = new User
-            {
-                Email = userDto.Email,
-                Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password),
-                Username = userDto.Username
-            };
+            var user = _mapper.Map<User>(userDto);
+            user.Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
 
-            await _authRepository.AddAsync(user);
-            await _authRepository.SaveChangesAsync();
+
+            await _unitOfWork.Auth.AddAsync(user);
+            await _unitOfWork.SaveChangesAsync();
 
             return "User registered successfully";
         }
 
         public async Task<string> ResetPasswordAsync(ResetPasswordDto dto)
         {
-            var user = await _authRepository.GetUserByEmailAsync(dto.Email);
+            var user = await _unitOfWork.Auth.GetUserByEmailAsync(dto.Email);
             if (user == null)
                 return "User not found";
 
             user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
-            await _authRepository.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             return "Password updated successfully";
         }
 
 
-        public async Task<string> LoginAsync(LoginDto loginDto)
+        public async Task<AuthResultDto> LoginAsync(LoginDto loginDto)
         {
-            var user = await _authRepository.GetUserByEmailAsync(loginDto.Email);
+            var user = await _unitOfWork.Auth.GetUserByEmailAsync(loginDto.Email);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password))
-                return "Invalid credentials";
+            {
+                return new AuthResultDto
+                {
+                    Success = false,
+                    Message = "Invalid credentials"
+                };
+            }
 
-            return GenerateJwtToken(user);
+            var accessToken = GenerateJwtToken(user);
+            var refreshToken = GenerateRefreshToken();
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+            await _unitOfWork.SaveChangesAsync();
+
+            return new AuthResultDto
+            {
+                Success = true,
+                Tokens = new AuthResponseDto(accessToken, refreshToken)
+            };
+
+        }
+
+        public async Task<string?> GetUsernameByIdAsync(int id)
+        {
+            var user = await _unitOfWork.Auth.GetByIdAsync(id); 
+            return user?.Username;
         }
 
         private string GenerateJwtToken(User user)
@@ -86,6 +110,42 @@ namespace WebApplication1.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public async Task<AuthResultDto> RefreshTokenAsync(string refreshToken)
+        {
+            var user = await _unitOfWork.Auth.GetUserByRefreshTokenAsync(refreshToken);
+            if (user == null || user.RefreshTokenExpiryTime < DateTime.UtcNow)
+            {
+                return new AuthResultDto
+                {
+                    Success = false,
+                    Message = "Invalid or expired refresh token"
+                };
+            }
+
+            var newAccessToken = GenerateJwtToken(user);
+            var newRefreshToken = GenerateRefreshToken();
+
+            user.RefreshToken = newRefreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+            await _unitOfWork.SaveChangesAsync();
+
+            return new AuthResultDto
+            {
+                Success = true,
+                Tokens = new AuthResponseDto(newAccessToken, newRefreshToken)
+            };
+        }
+
+
+        private string GenerateRefreshToken()
+        {
+            var randomBytes = new byte[64];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomBytes);
+            return Convert.ToBase64String(randomBytes);
+        }
+
     }
 }
 

@@ -6,6 +6,8 @@ namespace WebApplication1.Repositories
     {
         Task<User?> GetUserByEmailAsync(string email);
         Task<bool> UserExistsAsync(string email);
+        Task<User?> GetUserByRefreshTokenAsync(string refreshToken);
+
 
     }
 }

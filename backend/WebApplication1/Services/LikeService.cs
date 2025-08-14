@@ -7,24 +7,24 @@ using WebApplication1.Repositories;
 
 public class LikeService : ILikeService
 {
-    private readonly ILikeRepository _likeRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public LikeService(ILikeRepository likeRepository)
+    public LikeService(IUnitOfWork unitOfWork)
     {
-        _likeRepository = likeRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task ToggleLikeAsync(string userEmail, string postId)
     {
-        var user = await _likeRepository.GetUserByEmailAsync(userEmail);
+        var user = await _unitOfWork.Auth.GetUserByEmailAsync(userEmail);
         if (user == null) throw new Exception("User not found");
 
-        var existingLike = await _likeRepository.GetLikeAsync(user.Id, postId);
+        var existingLike = await _unitOfWork.Likes.GetLikeAsync(user.Id, postId);
 
         if (existingLike != null)
         {
-            _likeRepository.Remove(existingLike);
-            await _likeRepository.SaveChangesAsync();
+            _unitOfWork.Likes.Remove(existingLike);
+            
         }
         else
         {
@@ -34,21 +34,22 @@ public class LikeService : ILikeService
                 PostId = postId,
                 LikedAt = DateTime.UtcNow
             };
-            await _likeRepository.AddAsync(newLike);
-            await _likeRepository.SaveChangesAsync();
+            await _unitOfWork.Likes.AddAsync(newLike);
+            
         }
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task<int> GetLikeCountAsync(string postId)
     {
-        return await _likeRepository.GetLikeCountAsync(postId);
+        return await _unitOfWork.Likes.GetLikeCountAsync(postId);
     }
 
     public async Task<bool> HasUserLikedPostAsync(string userEmail, string postId)
     {
-        var user = await _likeRepository.GetUserByEmailAsync(userEmail);
+        var user = await _unitOfWork.Auth.GetUserByEmailAsync(userEmail);
         if (user == null) throw new Exception("User not found");
 
-        return await _likeRepository.HasUserLikedPostAsync(user.Id, postId);
+        return await _unitOfWork.Likes.HasUserLikedPostAsync(user.Id, postId);
     }
 }

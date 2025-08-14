@@ -1,0 +1,152 @@
+[01:01:17 INF] Application is shutting down...
+[01:01:38 INF] User profile is available. Using 'C:\Users\A2832847\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[01:01:38 INF] Now listening on: http://localhost:5213
+[01:01:38 INF] Application started. Press Ctrl+C to shut down.
+[01:01:38 INF] Hosting environment: Development
+[01:01:38 INF] Content root path: C:\Users\A2832847\Readzone_FullStack\backend\WebApplication1
+[01:09:51 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/Post - null null
+[01:09:51 WRN] Failed to determine the https port for redirect.
+[01:09:51 INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[01:09:51 INF] AuthenticationScheme: Bearer was challenged.
+[01:09:51 WRN] HTTP GET /api/Post responded 401 in 13.6393 ms
+[01:09:51 INF] Source:[::1] Request: GET http localhost:5213/api/Post   Responded with [401] in 131ms
+[01:09:51 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/Post - 401 119 application/json 221.3021ms
+[01:09:59 INF] Request starting HTTP/1.1 POST http://localhost:5213/api/Auth/login - application/json 66
+[01:09:59 INF] CORS policy execution failed.
+[01:09:59 INF] Request origin http://localhost:5213 does not have permission to access the resource.
+[01:09:59 INF] Executing endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[01:09:59 INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(WebApplication1.DTOs.LoginDto) on controller WebApplication1.Controllers.AuthController (WebApplication1).
+[01:10:00 INF] Executed DbCommand (44ms) [Parameters=[@__email_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Users] AS [u]
+WHERE [u].[Email] = @__email_0
+[01:10:01 INF] Executed DbCommand (7ms) [Parameters=[@p2='?' (DbType = Int32), @p0='?' (Size = 4000), @p1='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Users] SET [RefreshToken] = @p0, [RefreshTokenExpiryTime] = @p1
+OUTPUT 1
+WHERE [Id] = @p2;
+[01:10:01 INF] Login successful for email gwenstacy123@gmail.com
+[01:10:01 INF] Executing OkObjectResult, writing value of type 'WebApplication1.DTOs.AuthResponseDto'.
+[01:10:01 INF] Executed action WebApplication1.Controllers.AuthController.Login (WebApplication1) in 1697.774ms
+[01:10:01 INF] Executed endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[01:10:01 WRN] HTTP POST /api/Auth/login responded 200 in 1742.0933 ms
+[01:10:01 INF] Source:[::1] Request: POST http localhost:5213/api/Auth/login  {
+  "email": "gwenstacy123@gmail.com",
+  "password": "Gwen@1123"
+} Responded with [200] in 1812ms
+[01:10:01 INF] Request finished HTTP/1.1 POST http://localhost:5213/api/Auth/login - 200 678 application/json 1840.5395ms
+[01:10:24 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/Post - null null
+[01:10:24 INF] Bearer was not authenticated. Failure message: No SecurityTokenValidator available for token.
+[01:10:24 INF] Bearer was not authenticated. Failure message: No SecurityTokenValidator available for token.
+[01:10:24 INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[01:10:24 INF] AuthenticationScheme: Bearer was challenged.
+[01:10:24 WRN] HTTP GET /api/Post responded 401 in 8.3379 ms
+[01:10:24 INF] Source:[::1] Request: GET http localhost:5213/api/Post   Responded with [401] in 11ms
+[01:10:24 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/Post - 401 119 application/json 29.9319ms
+[01:10:45 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/Post - null null
+[01:10:45 INF] Executing endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[01:10:45 INF] Route matched with {action = "GetPosts", controller = "Post"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[WebApplication1.DTOs.PostDto]]] GetPosts(WebApplication1.DTOs.PaginationParamsDto) on controller WebApplication1.Controllers.PostController (WebApplication1).
+[01:10:46 INF] Executed DbCommand (19ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p0].[PostId], [p0].[Category], [p0].[Content], [p0].[CreatedDate], [p0].[Title], [p0].[UserId], [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM (
+    SELECT [p].[PostId], [p].[Category], [p].[Content], [p].[CreatedDate], [p].[Title], [p].[UserId]
+    FROM [Posts] AS [p]
+    ORDER BY [p].[CreatedDate] DESC
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [p0]
+INNER JOIN [Users] AS [u] ON [p0].[UserId] = [u].[Id]
+ORDER BY [p0].[CreatedDate] DESC
+[01:10:46 INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[WebApplication1.DTOs.PostDto, WebApplication1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[01:10:46 INF] Executed action WebApplication1.Controllers.PostController.GetPosts (WebApplication1) in 200.7683ms
+[01:10:46 INF] Executed endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[01:10:46 WRN] HTTP GET /api/Post responded 200 in 220.4088 ms
+[01:10:46 INF] Source:[::1] Request: GET http localhost:5213/api/Post   Responded with [200] in 249ms
+[01:10:46 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/Post - 200 19185 application/json 300.6522ms
+[01:17:39 INF] Request starting HTTP/1.1 GET http://localhost:5213/swagger/index.html - null null
+[01:17:39 INF] Request finished HTTP/1.1 GET http://localhost:5213/swagger/index.html - 200 null text/html;charset=utf-8 43.8508ms
+[01:17:39 INF] Request starting HTTP/1.1 GET http://localhost:5213/swagger/v1/swagger.json - null null
+[01:17:39 INF] Request finished HTTP/1.1 GET http://localhost:5213/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 64.962ms
+[01:18:21 INF] Request starting HTTP/1.1 POST http://localhost:5213/api/Auth/login - application/json 66
+[01:18:21 INF] CORS policy execution failed.
+[01:18:21 INF] Request origin http://localhost:5213 does not have permission to access the resource.
+[01:18:21 INF] Executing endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[01:18:21 INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(WebApplication1.DTOs.LoginDto) on controller WebApplication1.Controllers.AuthController (WebApplication1).
+[01:18:21 INF] Executed DbCommand (9ms) [Parameters=[@__email_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Users] AS [u]
+WHERE [u].[Email] = @__email_0
+[01:18:21 INF] Executed DbCommand (6ms) [Parameters=[@p2='?' (DbType = Int32), @p0='?' (Size = 4000), @p1='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Users] SET [RefreshToken] = @p0, [RefreshTokenExpiryTime] = @p1
+OUTPUT 1
+WHERE [Id] = @p2;
+[01:18:21 INF] Login successful for email gwenstacy123@gmail.com
+[01:18:21 INF] Executing OkObjectResult, writing value of type 'WebApplication1.DTOs.AuthResponseDto'.
+[01:18:21 INF] Executed action WebApplication1.Controllers.AuthController.Login (WebApplication1) in 180.2833ms
+[01:18:21 INF] Executed endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[01:18:21 WRN] HTTP POST /api/Auth/login responded 200 in 188.6456 ms
+[01:18:21 INF] Source:[::1] Request: POST http localhost:5213/api/Auth/login  {
+  "email": "gwenstacy123@gmail.com",
+  "password": "Gwen@1123"
+} Responded with [200] in 192ms
+[01:18:21 INF] Request finished HTTP/1.1 POST http://localhost:5213/api/Auth/login - 200 678 application/json 215.4178ms
+[01:19:39 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/Post?PageNumber=1&PageSize=4&ValidatedPageSize=4 - null null
+[01:19:39 INF] Executing endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[01:19:39 INF] Route matched with {action = "GetPosts", controller = "Post"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[WebApplication1.DTOs.PostDto]]] GetPosts(WebApplication1.DTOs.PaginationParamsDto) on controller WebApplication1.Controllers.PostController (WebApplication1).
+[01:19:39 INF] Executed DbCommand (10ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p0].[PostId], [p0].[Category], [p0].[Content], [p0].[CreatedDate], [p0].[Title], [p0].[UserId], [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM (
+    SELECT [p].[PostId], [p].[Category], [p].[Content], [p].[CreatedDate], [p].[Title], [p].[UserId]
+    FROM [Posts] AS [p]
+    ORDER BY [p].[CreatedDate] DESC
+    OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+) AS [p0]
+INNER JOIN [Users] AS [u] ON [p0].[UserId] = [u].[Id]
+ORDER BY [p0].[CreatedDate] DESC
+[01:19:39 INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[WebApplication1.DTOs.PostDto, WebApplication1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[01:19:40 INF] Executed action WebApplication1.Controllers.PostController.GetPosts (WebApplication1) in 29.9186ms
+[01:19:40 INF] Executed endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[01:19:40 WRN] HTTP GET /api/Post responded 200 in 40.8881 ms
+[01:19:40 INF] Source:[::1] Request: GET http localhost:5213/api/Post ?PageNumber=1&PageSize=4&ValidatedPageSize=4  Responded with [200] in 44ms
+[01:19:40 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/Post?PageNumber=1&PageSize=4&ValidatedPageSize=4 - 200 11410 application/json 61.9013ms
+[10:14:32 INF] Request starting HTTP/1.1 POST http://localhost:5213/api/Auth/login - application/json 66
+[10:14:32 INF] CORS policy execution failed.
+[10:14:32 INF] Request origin http://localhost:5213 does not have permission to access the resource.
+[10:14:32 INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '7/30/2025 8:48:21 PM', Current time (UTC): '7/31/2025 4:44:32 AM'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateJWS(String token, TokenValidationParameters validationParameters, BaseConfiguration currentConfiguration, SecurityToken& signatureValidatedToken, ExceptionDispatchInfo& exceptionThrown)
+--- End of stack trace from previous location ---
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, JwtSecurityToken outerToken, TokenValidationParameters validationParameters, SecurityToken& signatureValidatedToken)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+[10:14:32 INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '7/30/2025 8:48:21 PM', Current time (UTC): '7/31/2025 4:44:32 AM'.
+[10:14:32 INF] Executing endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[10:14:32 INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(WebApplication1.DTOs.LoginDto) on controller WebApplication1.Controllers.AuthController (WebApplication1).
+[10:14:32 INF] Executed DbCommand (15ms) [Parameters=[@__email_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Users] AS [u]
+WHERE [u].[Email] = @__email_0
+[10:14:32 INF] Executed DbCommand (12ms) [Parameters=[@p2='?' (DbType = Int32), @p0='?' (Size = 4000), @p1='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Users] SET [RefreshToken] = @p0, [RefreshTokenExpiryTime] = @p1
+OUTPUT 1
+WHERE [Id] = @p2;
+[10:14:32 INF] Login successful for email gwenstacy123@gmail.com
+[10:14:32 INF] Executing OkObjectResult, writing value of type 'WebApplication1.DTOs.AuthResponseDto'.
+[10:14:32 INF] Executed action WebApplication1.Controllers.AuthController.Login (WebApplication1) in 191.2435ms
+[10:14:32 INF] Executed endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[10:14:32 WRN] HTTP POST /api/Auth/login responded 200 in 199.2126 ms
+[10:14:32 INF] Source:[::1] Request: POST http localhost:5213/api/Auth/login  {
+  "email": "gwenstacy123@gmail.com",
+  "password": "Gwen@1123"
+} Responded with [200] in 203ms
+[10:14:32 INF] Request finished HTTP/1.1 POST http://localhost:5213/api/Auth/login - 200 678 application/json 261.2151ms
+[10:15:06 INF] Application is shutting down...

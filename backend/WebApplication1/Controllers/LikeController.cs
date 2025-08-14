@@ -5,7 +5,8 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     [ApiController]
     public class LikeController : ControllerBase
     {
@@ -23,17 +24,13 @@ namespace WebApplication1.Controllers
             var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
             if (string.IsNullOrEmpty(userEmail)) return Unauthorized("User email not found in token");
 
-            try
-            {
-                await _likeService.ToggleLikeAsync(userEmail, likeRequest.PostId);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _likeService.ToggleLikeAsync(userEmail, likeRequest.PostId);
+            return Ok("Like toggled successfully");
+            
+            
         }
 
+        [AllowAnonymous]
         [HttpGet("count/{postId}")]
         public async Task<IActionResult> GetLikeCount(string postId)
         {
@@ -41,6 +38,7 @@ namespace WebApplication1.Controllers
             return Ok(count);
         }
 
+        //to check if current user has already liked the post
         [Authorize]
         [HttpGet("userliked/{postId}")]
         public async Task<IActionResult> UserLiked(string postId)
@@ -48,15 +46,9 @@ namespace WebApplication1.Controllers
             var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
             if (string.IsNullOrEmpty(userEmail)) return Unauthorized("User email not found in token");
 
-            try
-            {
-                bool liked = await _likeService.HasUserLikedPostAsync(userEmail, postId);
-                return Ok(liked);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            bool liked = await _likeService.HasUserLikedPostAsync(userEmail, postId);
+            return Ok(liked);
+           
         }
     }
 }

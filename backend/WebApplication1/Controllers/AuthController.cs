@@ -11,24 +11,23 @@ using WebApplication1.Data;
 using WebApplication1.DTOs;
 using WebApplication1.Models;
 using WebApplication1.Services;
-
+using Microsoft.Extensions.Logging;
 
 namespace WebApplication1.Controllers
 {
-    
-    [Route("api/[controller]")]
+
+    [ApiVersion("1.0")] // defines the version
+    [Route("api/v{version:apiVersion}/[controller]")] //  adds version in route
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        private readonly IConfiguration _configuration;
         private readonly IAuthService _authService;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IAuthService authService, AppDbContext context, IConfiguration configuration)
+        public AuthController(IAuthService authService, ILogger<AuthController> logger)
         {
             _authService = authService;
-            _context = context;
-            _configuration = configuration;
+            _logger = logger;
         }
 
         [HttpPost("register")]
@@ -37,44 +36,70 @@ namespace WebApplication1.Controllers
             var result = await _authService.RegisterAsync(userDto);
 
             if (result == "User already exists")
+            {
+                _logger.LogWarning("Registration failed: user already exists for email {Email}", userDto.Email);
                 return BadRequest(result);
+            }
 
-            return Ok(new { message = result });
+            _logger.LogInformation("User registered successfully: {Email}", userDto.Email);
+            return Ok(result);
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
+            var result = await _authService.LoginAsync(loginDto);
 
-            var token = await _authService.LoginAsync(loginDto);
+            if (!result.Success)
+            {
+                _logger.LogWarning("Login failed for email {Email}: {Reason}", loginDto.Email, result.Message);
+                return Unauthorized(result.Message);
+            }
 
-            if (token == "Invalid credentials")
-                return Unauthorized(token);
-
-            return Ok(new { token });
+            _logger.LogInformation("Login successful for email {Email}", loginDto.Email);
+            return Ok(result.Tokens);
             
         }
 
         [HttpGet("user/{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            var username = await _authService.GetUsernameByIdAsync(id);
+            if (username == null)
                 return NotFound(new { message = "User not found" });
 
-            return Ok(new { username = user.Username });
+            return Ok(username);
         }
 
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
         {
+            _logger.LogInformation("Password reset attempt for email {Email}", dto.Email);
             var result = await _authService.ResetPasswordAsync(dto);
 
             if (result == "User not found")
-                return NotFound(new { message = result });
+            {
+                _logger.LogWarning("Password reset failed: user not found for email {Email}", dto.Email);
+                return NotFound(result);
 
-            return Ok(new { message = result });
+            }
+
+            _logger.LogInformation("Password reset successful for email {Email}", dto.Email);
+            return Ok(result);
         }
+
+        [HttpPost("refresh-token")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+        {
+            var result = await _authService.RefreshTokenAsync(refreshToken);
+
+            if (!result.Success)
+                return Unauthorized(new { result.Message });
+
+            return Ok(result.Tokens);
+        }
+
 
     }
 }

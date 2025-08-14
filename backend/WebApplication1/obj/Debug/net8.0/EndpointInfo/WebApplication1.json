@@ -1,11 +1,11 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "WebApplication1",
-    "version": "1.0"
+    "title": "My API",
+    "version": "v1"
   },
   "paths": {
-    "/api/Auth/register": {
+    "/api/v1/Auth/register": {
       "post": {
         "tags": [
           "Auth"
@@ -14,17 +14,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/UserDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/UserDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/UserDto"
               }
             }
           }
@@ -36,7 +36,7 @@
         }
       }
     },
-    "/api/Auth/login": {
+    "/api/v1/Auth/login": {
       "post": {
         "tags": [
           "Auth"
@@ -67,7 +67,7 @@
         }
       }
     },
-    "/api/Auth/user/{id}": {
+    "/api/v1/Auth/user/{id}": {
       "get": {
         "tags": [
           "Auth"
@@ -90,7 +90,7 @@
         }
       }
     },
-    "/api/Auth/reset-password": {
+    "/api/v1/Auth/reset-password": {
       "post": {
         "tags": [
           "Auth"
@@ -121,7 +121,38 @@
         }
       }
     },
-    "/api/Comment/{postId}": {
+    "/api/v1/Auth/refresh-token": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/Comment/{postId}": {
       "post": {
         "tags": [
           "Comment"
@@ -182,7 +213,7 @@
         }
       }
     },
-    "/api/Comment/{commentId}": {
+    "/api/v1/Comment/{commentId}": {
       "delete": {
         "tags": [
           "Comment"
@@ -205,7 +236,7 @@
         }
       }
     },
-    "/api/Comment/count/{postId}": {
+    "/api/v1/Comment/count/{postId}": {
       "get": {
         "tags": [
           "Comment"
@@ -227,7 +258,7 @@
         }
       }
     },
-    "/api/Like/toggle": {
+    "/api/v1/Like/toggle": {
       "post": {
         "tags": [
           "Like"
@@ -258,7 +289,7 @@
         }
       }
     },
-    "/api/Like/count/{postId}": {
+    "/api/v1/Like/count/{postId}": {
       "get": {
         "tags": [
           "Like"
@@ -280,7 +311,7 @@
         }
       }
     },
-    "/api/Like/userliked/{postId}": {
+    "/api/v1/Like/userliked/{postId}": {
       "get": {
         "tags": [
           "Like"
@@ -302,7 +333,7 @@
         }
       }
     },
-    "/api/Post": {
+    "/api/v1/Post": {
       "post": {
         "tags": [
           "Post"
@@ -311,17 +342,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Post"
+                "$ref": "#/components/schemas/CreatePostDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Post"
+                "$ref": "#/components/schemas/CreatePostDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Post"
+                "$ref": "#/components/schemas/CreatePostDto"
               }
             }
           }
@@ -336,32 +367,49 @@
         "tags": [
           "Post"
         ],
+        "parameters": [
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "ValidatedPageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Post"
-                  }
+                  "$ref": "#/components/schemas/PostDtoPagedResult"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Post"
-                  }
+                  "$ref": "#/components/schemas/PostDtoPagedResult"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Post"
-                  }
+                  "$ref": "#/components/schemas/PostDtoPagedResult"
                 }
               }
             }
@@ -369,7 +417,7 @@
         }
       }
     },
-    "/api/Post/{id}": {
+    "/api/v1/Post/{id}": {
       "get": {
         "tags": [
           "Post"
@@ -390,17 +438,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Post"
+                  "$ref": "#/components/schemas/PostDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Post"
+                  "$ref": "#/components/schemas/PostDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Post"
+                  "$ref": "#/components/schemas/PostDto"
                 }
               }
             }
@@ -425,17 +473,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Post"
+                "$ref": "#/components/schemas/CreatePostDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Post"
+                "$ref": "#/components/schemas/CreatePostDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Post"
+                "$ref": "#/components/schemas/CreatePostDto"
               }
             }
           }
@@ -467,7 +515,7 @@
         }
       }
     },
-    "/api/Post/myposts": {
+    "/api/v1/Post/myposts": {
       "get": {
         "tags": [
           "Post"
@@ -479,7 +527,7 @@
         }
       }
     },
-    "/api/Post/search": {
+    "/api/v1/Post/search": {
       "get": {
         "tags": [
           "Post"
@@ -546,15 +594,29 @@
         "additionalProperties": false
       },
       "CreateCommentDto": {
-        "required": [
-          "content"
-        ],
         "type": "object",
         "properties": {
           "content": {
-            "maxLength": 1000,
-            "minLength": 1,
-            "type": "string"
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreatePostDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -598,7 +660,7 @@
             "type": "string",
             "nullable": true
           },
-          "passwordHash": {
+          "password": {
             "type": "string",
             "nullable": true
           }
@@ -659,6 +721,84 @@
         },
         "additionalProperties": false
       },
+      "PostDto": {
+        "required": [
+          "content",
+          "createdDate",
+          "postId",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "postId": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PostDtoPagedResult": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PostDto"
+            },
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "hasNext": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "hasPrevious": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ResetPasswordDto": {
         "type": "object",
         "properties": {
@@ -676,7 +816,7 @@
       "User": {
         "required": [
           "email",
-          "passwordHash"
+          "password"
         ],
         "type": "object",
         "properties": {
@@ -692,13 +832,52 @@
             "minLength": 1,
             "type": "string"
           },
-          "passwordHash": {
+          "password": {
             "minLength": 1,
             "type": "string"
+          },
+          "refreshToken": {
+            "type": "string",
+            "nullable": true
+          },
+          "refreshTokenExpiryTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
       }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Enter 'Bearer' followed by your token. Example: Bearer 12345abcdef",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
     }
-  }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
 }

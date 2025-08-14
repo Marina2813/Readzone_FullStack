@@ -1,8 +1,10 @@
-﻿namespace WebApplication1.DTOs
+﻿using WebApplication1.validation;
+
+namespace WebApplication1.DTOs
 {
     public record ResetPasswordDto(
-        string Email,
-        string NewPassword
+        [RequiredBind] string Email,
+        [RequiredBind] string NewPassword
     );
     
 }

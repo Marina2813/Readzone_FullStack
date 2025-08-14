@@ -5,15 +5,11 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Repositories
 {
-    public class LikeRepository: ILikeRepository
+    public class LikeRepository: GenericRepository<Like>,ILikeRepository
     {
-        private readonly AppDbContext _context;
-        private readonly IGenericRepository<Like> _genericRepository;
 
-        public LikeRepository(AppDbContext context, IGenericRepository<Like> genericRepository) 
+        public LikeRepository(AppDbContext context) : base(context)
         {
-            _context = context;
-            _genericRepository = genericRepository;
         }
 
         public async Task<Like?> GetLikeAsync(int userId, string postId)
@@ -43,13 +39,10 @@ namespace WebApplication1.Repositories
             return await _context.Likes.AnyAsync(l => l.UserId == userId && l.PostId == postId);
         }
 
-        public async Task<User?> GetUserByEmailAsync(string email)
+       /* public async Task<User?> GetUserByEmailAsync(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-        }
+        }*/
 
-        public Task AddAsync(Like like) => _genericRepository.AddAsync(like);
-        public void Remove(Like like) => _genericRepository.Remove(like);
-        public Task SaveChangesAsync() => _genericRepository.SaveChangesAsync();
     }
 }

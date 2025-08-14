@@ -1,0 +1,385 @@
+[00:37:37 INF] Application is shutting down...
+[00:37:58 INF] User profile is available. Using 'C:\Users\A2832847\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[00:37:58 INF] Now listening on: http://localhost:5213
+[00:37:58 INF] Application started. Press Ctrl+C to shut down.
+[00:37:58 INF] Hosting environment: Development
+[00:37:58 INF] Content root path: C:\Users\A2832847\Readzone_FullStack\backend\WebApplication1
+[09:47:51 INF] Application is shutting down...
+[10:04:11 INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+[10:04:11 INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+[10:04:11 INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_getapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session', @LockMode = 'Exclusive';
+SELECT @result
+[10:04:11 INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+[10:04:11 INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+[10:04:11 INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+[10:04:11 INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+[10:04:11 INF] Applying migration '20250730043350_AddRefreshTokenToUser'.
+[10:04:11 INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Users] ADD [RefreshToken] nvarchar(max) NULL;
+[10:04:11 INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Users] ADD [RefreshTokenExpiryTime] datetime2 NOT NULL DEFAULT '0001-01-01T00:00:00.0000000';
+[10:04:11 INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20250730043350_AddRefreshTokenToUser', N'9.0.5');
+[10:04:11 INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @result int;
+EXEC @result = sp_releaseapplock @Resource = '__EFMigrationsLock', @LockOwner = 'Session';
+SELECT @result
+[10:56:06 INF] User profile is available. Using 'C:\Users\A2832847\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[10:56:06 INF] Now listening on: http://localhost:5213
+[10:56:06 INF] Application started. Press Ctrl+C to shut down.
+[10:56:06 INF] Hosting environment: Development
+[10:56:06 INF] Content root path: C:\Users\A2832847\Readzone_FullStack\backend\WebApplication1
+[10:56:18 INF] Request starting HTTP/1.1 GET http://localhost:5213/swagger/index.html - null null
+[10:56:18 INF] Request finished HTTP/1.1 GET http://localhost:5213/swagger/index.html - 200 null text/html;charset=utf-8 85.3446ms
+[10:56:18 INF] Request starting HTTP/1.1 GET http://localhost:5213/swagger/v1/swagger.json - null null
+[10:56:18 INF] Request finished HTTP/1.1 GET http://localhost:5213/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 73.5973ms
+[10:56:46 INF] Request starting HTTP/1.1 POST http://localhost:5213/api/Auth/login - application/json 66
+[10:56:46 INF] CORS policy execution failed.
+[10:56:46 INF] Request origin http://localhost:5213 does not have permission to access the resource.
+[10:56:46 WRN] Failed to determine the https port for redirect.
+[10:56:47 INF] Executing endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[10:56:47 INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(WebApplication1.DTOs.LoginDto) on controller WebApplication1.Controllers.AuthController (WebApplication1).
+[10:56:47 INF] Executed DbCommand (32ms) [Parameters=[@__email_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Users] AS [u]
+WHERE [u].[Email] = @__email_0
+[10:56:48 INF] Executed DbCommand (6ms) [Parameters=[@p2='?' (DbType = Int32), @p0='?' (Size = 4000), @p1='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Users] SET [RefreshToken] = @p0, [RefreshTokenExpiryTime] = @p1
+OUTPUT 1
+WHERE [Id] = @p2;
+[10:56:48 INF] Login successful for email gwenstacy123@gmail.com
+[10:56:48 INF] Executing OkObjectResult, writing value of type 'WebApplication1.DTOs.AuthResponseDto'.
+[10:56:48 INF] Executed action WebApplication1.Controllers.AuthController.Login (WebApplication1) in 1330.8376ms
+[10:56:48 INF] Executed endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[10:56:48 WRN] HTTP POST /api/Auth/login responded 200 in 1361.9407 ms
+[10:56:48 INF] Source:[::1] Request: POST http localhost:5213/api/Auth/login  {
+  "email": "gwenstacy123@gmail.com",
+  "password": "Gwen@1123"
+} Responded with [200] in 1480ms
+[10:56:48 INF] Request finished HTTP/1.1 POST http://localhost:5213/api/Auth/login - 200 678 application/json 1532.2754ms
+[12:05:08 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/Auth/login - null null
+[12:05:08 INF] CORS policy execution successful.
+[12:05:08 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/Auth/login - 204 null null 9.6745ms
+[12:05:08 INF] Request starting HTTP/1.1 POST http://localhost:5213/api/Auth/login - application/json 48
+[12:05:08 INF] CORS policy execution successful.
+[12:05:08 INF] Executing endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[12:05:08 INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(WebApplication1.DTOs.LoginDto) on controller WebApplication1.Controllers.AuthController (WebApplication1).
+[12:05:08 INF] Executed DbCommand (8ms) [Parameters=[@__email_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Users] AS [u]
+WHERE [u].[Email] = @__email_0
+[12:05:08 WRN] Login failed for email gwenstacy123@gmail.com: Invalid credentials
+[12:05:08 INF] Executing UnauthorizedObjectResult, writing value of type 'System.String'.
+[12:05:08 INF] Executed action WebApplication1.Controllers.AuthController.Login (WebApplication1) in 165.1505ms
+[12:05:08 INF] Executed endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[12:05:08 WRN] HTTP POST /api/Auth/login responded 401 in 171.4157 ms
+[12:05:08 INF] Source:[::1] Request: POST http localhost:5213/api/Auth/login  {"email":"gwenstacy123@gmail.com","password":""} Responded with [401] in 183ms
+[12:05:08 INF] Request finished HTTP/1.1 POST http://localhost:5213/api/Auth/login - 401 102 application/json 190.9213ms
+[12:05:20 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/Auth/login - null null
+[12:05:20 INF] CORS policy execution successful.
+[12:05:20 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/Auth/login - 204 null null 6.3165ms
+[12:05:20 INF] Request starting HTTP/1.1 POST http://localhost:5213/api/Auth/login - application/json 57
+[12:05:20 INF] CORS policy execution successful.
+[12:05:20 INF] Executing endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[12:05:20 INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(WebApplication1.DTOs.LoginDto) on controller WebApplication1.Controllers.AuthController (WebApplication1).
+[12:05:20 INF] Executed DbCommand (1ms) [Parameters=[@__email_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Users] AS [u]
+WHERE [u].[Email] = @__email_0
+[12:05:21 INF] Executed DbCommand (3ms) [Parameters=[@p2='?' (DbType = Int32), @p0='?' (Size = 4000), @p1='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Users] SET [RefreshToken] = @p0, [RefreshTokenExpiryTime] = @p1
+OUTPUT 1
+WHERE [Id] = @p2;
+[12:05:21 INF] Login successful for email gwenstacy123@gmail.com
+[12:05:21 INF] Executing OkObjectResult, writing value of type 'WebApplication1.DTOs.AuthResponseDto'.
+[12:05:21 INF] Executed action WebApplication1.Controllers.AuthController.Login (WebApplication1) in 130.7472ms
+[12:05:21 INF] Executed endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[12:05:21 WRN] HTTP POST /api/Auth/login responded 200 in 137.9970 ms
+[12:05:21 INF] Source:[::1] Request: POST http localhost:5213/api/Auth/login  {"email":"gwenstacy123@gmail.com","password":"Gwen@1123"} Responded with [200] in 140ms
+[12:05:21 INF] Request finished HTTP/1.1 POST http://localhost:5213/api/Auth/login - 200 678 application/json 147.0169ms
+[12:05:21 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/post - null null
+[12:05:21 INF] CORS policy execution successful.
+[12:05:21 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/post - 204 null null 4.528ms
+[12:05:21 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/post - null null
+[12:05:21 INF] CORS policy execution successful.
+[12:05:21 INF] Bearer was not authenticated. Failure message: No SecurityTokenValidator available for token.
+[12:05:21 INF] Bearer was not authenticated. Failure message: No SecurityTokenValidator available for token.
+[12:05:21 INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[12:05:21 INF] AuthenticationScheme: Bearer was challenged.
+[12:05:21 WRN] HTTP GET /api/post responded 401 in 12.5272 ms
+[12:05:21 INF] Source:[::1] Request: GET http localhost:5213/api/post   Responded with [401] in 15ms
+[12:05:21 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/post - 401 119 application/json 26.0173ms
+[12:07:36 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/Auth/login - null null
+[12:07:36 INF] CORS policy execution successful.
+[12:07:36 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/Auth/login - 204 null null 7.8828ms
+[12:07:36 INF] Request starting HTTP/1.1 POST http://localhost:5213/api/Auth/login - application/json 57
+[12:07:36 INF] CORS policy execution successful.
+[12:07:36 INF] Bearer was not authenticated. Failure message: No SecurityTokenValidator available for token.
+[12:07:36 INF] Executing endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[12:07:36 INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(WebApplication1.DTOs.LoginDto) on controller WebApplication1.Controllers.AuthController (WebApplication1).
+[12:07:36 INF] Executed DbCommand (5ms) [Parameters=[@__email_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Users] AS [u]
+WHERE [u].[Email] = @__email_0
+[12:07:36 INF] Executed DbCommand (4ms) [Parameters=[@p2='?' (DbType = Int32), @p0='?' (Size = 4000), @p1='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Users] SET [RefreshToken] = @p0, [RefreshTokenExpiryTime] = @p1
+OUTPUT 1
+WHERE [Id] = @p2;
+[12:07:36 INF] Login successful for email gwenstacy123@gmail.com
+[12:07:36 INF] Executing OkObjectResult, writing value of type 'WebApplication1.DTOs.AuthResponseDto'.
+[12:07:36 INF] Executed action WebApplication1.Controllers.AuthController.Login (WebApplication1) in 122.8691ms
+[12:07:36 INF] Executed endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[12:07:36 WRN] HTTP POST /api/Auth/login responded 200 in 128.5573 ms
+[12:07:36 INF] Source:[::1] Request: POST http localhost:5213/api/Auth/login  {"email":"gwenstacy123@gmail.com","password":"Gwen@1123"} Responded with [200] in 131ms
+[12:07:36 INF] Request finished HTTP/1.1 POST http://localhost:5213/api/Auth/login - 200 678 application/json 139.4645ms
+[12:07:36 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/post - null null
+[12:07:36 INF] CORS policy execution successful.
+[12:07:36 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/post - 204 null null 5.4535ms
+[12:07:36 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/post - null null
+[12:07:36 INF] CORS policy execution successful.
+[12:07:36 INF] Bearer was not authenticated. Failure message: No SecurityTokenValidator available for token.
+[12:07:36 INF] Bearer was not authenticated. Failure message: No SecurityTokenValidator available for token.
+[12:07:36 INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[12:07:36 INF] AuthenticationScheme: Bearer was challenged.
+[12:07:36 WRN] HTTP GET /api/post responded 401 in 8.2869 ms
+[12:07:36 INF] Source:[::1] Request: GET http localhost:5213/api/post   Responded with [401] in 11ms
+[12:07:36 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/post - 401 119 application/json 19.3595ms
+[12:15:22 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/post - null null
+[12:15:22 INF] CORS policy execution successful.
+[12:15:22 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/post - 204 null null 8.4243ms
+[12:15:22 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/post - null null
+[12:15:22 INF] CORS policy execution successful.
+[12:15:22 INF] Bearer was not authenticated. Failure message: No SecurityTokenValidator available for token.
+[12:15:22 INF] Bearer was not authenticated. Failure message: No SecurityTokenValidator available for token.
+[12:15:22 INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[12:15:22 INF] AuthenticationScheme: Bearer was challenged.
+[12:15:22 WRN] HTTP GET /api/post responded 401 in 10.3265 ms
+[12:15:22 INF] Source:[::1] Request: GET http localhost:5213/api/post   Responded with [401] in 13ms
+[12:15:22 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/post - 401 119 application/json 23.0671ms
+[12:18:24 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/post - null null
+[12:18:24 INF] CORS policy execution successful.
+[12:18:24 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/post - 204 null null 6.9144ms
+[12:18:24 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/post - null null
+[12:18:24 INF] CORS policy execution successful.
+[12:18:24 INF] Bearer was not authenticated. Failure message: No SecurityTokenValidator available for token.
+[12:18:24 INF] Bearer was not authenticated. Failure message: No SecurityTokenValidator available for token.
+[12:18:24 INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[12:18:24 INF] AuthenticationScheme: Bearer was challenged.
+[12:18:24 WRN] HTTP GET /api/post responded 401 in 7.2608 ms
+[12:18:24 INF] Source:[::1] Request: GET http localhost:5213/api/post   Responded with [401] in 13ms
+[12:18:24 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/post - 401 119 application/json 29.165ms
+[12:19:32 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/Auth/login - null null
+[12:19:32 INF] CORS policy execution successful.
+[12:19:32 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/Auth/login - 204 null null 5.8581ms
+[12:19:32 INF] Request starting HTTP/1.1 POST http://localhost:5213/api/Auth/login - application/json 57
+[12:19:32 INF] CORS policy execution successful.
+[12:19:32 INF] Executing endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[12:19:32 INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(WebApplication1.DTOs.LoginDto) on controller WebApplication1.Controllers.AuthController (WebApplication1).
+[12:19:32 INF] Executed DbCommand (6ms) [Parameters=[@__email_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Users] AS [u]
+WHERE [u].[Email] = @__email_0
+[12:19:32 INF] Executed DbCommand (4ms) [Parameters=[@p2='?' (DbType = Int32), @p0='?' (Size = 4000), @p1='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Users] SET [RefreshToken] = @p0, [RefreshTokenExpiryTime] = @p1
+OUTPUT 1
+WHERE [Id] = @p2;
+[12:19:32 INF] Login successful for email gwenstacy123@gmail.com
+[12:19:32 INF] Executing OkObjectResult, writing value of type 'WebApplication1.DTOs.AuthResponseDto'.
+[12:19:32 INF] Executed action WebApplication1.Controllers.AuthController.Login (WebApplication1) in 128.8534ms
+[12:19:32 INF] Executed endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[12:19:32 WRN] HTTP POST /api/Auth/login responded 200 in 135.1740 ms
+[12:19:32 INF] Source:[::1] Request: POST http localhost:5213/api/Auth/login  {"email":"gwenstacy123@gmail.com","password":"Gwen@1123"} Responded with [200] in 138ms
+[12:19:32 INF] Request finished HTTP/1.1 POST http://localhost:5213/api/Auth/login - 200 678 application/json 144.3189ms
+[12:19:32 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/post - null null
+[12:19:32 INF] CORS policy execution successful.
+[12:19:32 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/post - 204 null null 5.6697ms
+[12:19:32 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/post - null null
+[12:19:32 INF] CORS policy execution successful.
+[12:19:32 INF] Executing endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[12:19:32 INF] Route matched with {action = "GetPosts", controller = "Post"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[WebApplication1.DTOs.PostDto]]] GetPosts() on controller WebApplication1.Controllers.PostController (WebApplication1).
+[12:19:32 INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[PostId], [p].[Category], [p].[Content], [p].[CreatedDate], [p].[Title], [p].[UserId], [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Posts] AS [p]
+INNER JOIN [Users] AS [u] ON [p].[UserId] = [u].[Id]
+ORDER BY [p].[CreatedDate] DESC
+[12:19:32 INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[WebApplication1.DTOs.PostDto, WebApplication1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[12:19:32 INF] Executed action WebApplication1.Controllers.PostController.GetPosts (WebApplication1) in 105.8545ms
+[12:19:32 INF] Executed endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[12:19:32 WRN] HTTP GET /api/post responded 200 in 117.3331 ms
+[12:19:32 INF] Source:[::1] Request: GET http localhost:5213/api/post   Responded with [200] in 140ms
+[12:19:32 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/post - 200 19185 application/json 176.3349ms
+[12:19:54 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/post - null null
+[12:19:54 INF] CORS policy execution successful.
+[12:19:54 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/post - 204 null null 6.0627ms
+[12:19:54 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/post - null null
+[12:19:54 INF] CORS policy execution successful.
+[12:19:54 INF] Executing endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[12:19:54 INF] Route matched with {action = "GetPosts", controller = "Post"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[WebApplication1.DTOs.PostDto]]] GetPosts() on controller WebApplication1.Controllers.PostController (WebApplication1).
+[12:19:54 INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[PostId], [p].[Category], [p].[Content], [p].[CreatedDate], [p].[Title], [p].[UserId], [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Posts] AS [p]
+INNER JOIN [Users] AS [u] ON [p].[UserId] = [u].[Id]
+ORDER BY [p].[CreatedDate] DESC
+[12:19:55 INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[WebApplication1.DTOs.PostDto, WebApplication1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[12:19:55 INF] Executed action WebApplication1.Controllers.PostController.GetPosts (WebApplication1) in 47.1228ms
+[12:19:55 INF] Executed endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[12:19:55 WRN] HTTP GET /api/post responded 200 in 58.6220 ms
+[12:19:55 INF] Source:[::1] Request: GET http localhost:5213/api/post   Responded with [200] in 66ms
+[12:19:55 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/post - 200 19185 application/json 79.8598ms
+[12:21:02 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/Post/myposts - null null
+[12:21:02 INF] CORS policy execution successful.
+[12:21:02 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/Post/myposts - 204 null null 6.9181ms
+[12:21:02 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/Post/myposts - null null
+[12:21:02 INF] CORS policy execution successful.
+[12:21:02 INF] Executing endpoint 'WebApplication1.Controllers.PostController.GetUserPosts (WebApplication1)'
+[12:21:02 INF] Route matched with {action = "GetUserPosts", controller = "Post"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetUserPosts() on controller WebApplication1.Controllers.PostController (WebApplication1).
+[12:21:02 INF] Executed DbCommand (6ms) [Parameters=[@__email_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Users] AS [u]
+WHERE [u].[Email] = @__email_0
+[12:21:02 INF] Executed DbCommand (5ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[PostId], [p].[Category], [p].[Content], [p].[CreatedDate], [p].[Title], [p].[UserId], [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Posts] AS [p]
+INNER JOIN [Users] AS [u] ON [p].[UserId] = [u].[Id]
+WHERE [p].[UserId] = @__userId_0
+ORDER BY [p].[CreatedDate] DESC
+[12:21:02 INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[WebApplication1.DTOs.PostDto, WebApplication1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[12:21:02 INF] Executed action WebApplication1.Controllers.PostController.GetUserPosts (WebApplication1) in 33.7853ms
+[12:21:02 INF] Executed endpoint 'WebApplication1.Controllers.PostController.GetUserPosts (WebApplication1)'
+[12:21:02 WRN] HTTP GET /api/Post/myposts responded 200 in 45.9316 ms
+[12:21:02 INF] Source:[::1] Request: GET http localhost:5213/api/Post/myposts   Responded with [200] in 48ms
+[12:21:02 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/Post/myposts - 200 7740 application/json 57.6389ms
+[12:21:18 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/post - null null
+[12:21:18 INF] CORS policy execution successful.
+[12:21:18 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/post - 204 null null 7.505ms
+[12:21:18 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/post - null null
+[12:21:18 INF] CORS policy execution successful.
+[12:21:18 INF] Executing endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[12:21:18 INF] Route matched with {action = "GetPosts", controller = "Post"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[WebApplication1.DTOs.PostDto]]] GetPosts() on controller WebApplication1.Controllers.PostController (WebApplication1).
+[12:21:18 INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[PostId], [p].[Category], [p].[Content], [p].[CreatedDate], [p].[Title], [p].[UserId], [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Posts] AS [p]
+INNER JOIN [Users] AS [u] ON [p].[UserId] = [u].[Id]
+ORDER BY [p].[CreatedDate] DESC
+[12:21:18 INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[WebApplication1.DTOs.PostDto, WebApplication1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[12:21:18 INF] Executed action WebApplication1.Controllers.PostController.GetPosts (WebApplication1) in 10.5071ms
+[12:21:18 INF] Executed endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[12:21:18 WRN] HTTP GET /api/post responded 200 in 18.2596 ms
+[12:21:18 INF] Source:[::1] Request: GET http localhost:5213/api/post   Responded with [200] in 23ms
+[12:21:18 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/post - 200 19185 application/json 32.4933ms
+[12:22:55 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/post - null null
+[12:22:55 INF] CORS policy execution successful.
+[12:22:55 INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+[12:22:55 INF] AuthenticationScheme: Bearer was challenged.
+[12:22:55 WRN] HTTP GET /api/post responded 401 in 8.5090 ms
+[12:22:55 INF] Source:[::1] Request: GET http localhost:5213/api/post   Responded with [401] in 13ms
+[12:22:55 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/post - 401 119 application/json 25.7793ms
+[12:29:34 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/Auth/login - null null
+[12:29:34 INF] CORS policy execution successful.
+[12:29:34 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/Auth/login - 204 null null 7.6002ms
+[12:29:34 INF] Request starting HTTP/1.1 POST http://localhost:5213/api/Auth/login - application/json 57
+[12:29:34 INF] CORS policy execution successful.
+[12:29:34 INF] Executing endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[12:29:34 INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(WebApplication1.DTOs.LoginDto) on controller WebApplication1.Controllers.AuthController (WebApplication1).
+[12:29:34 INF] Executed DbCommand (11ms) [Parameters=[@__email_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Users] AS [u]
+WHERE [u].[Email] = @__email_0
+[12:29:34 INF] Executed DbCommand (4ms) [Parameters=[@p2='?' (DbType = Int32), @p0='?' (Size = 4000), @p1='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Users] SET [RefreshToken] = @p0, [RefreshTokenExpiryTime] = @p1
+OUTPUT 1
+WHERE [Id] = @p2;
+[12:29:34 INF] Login successful for email gwenstacy123@gmail.com
+[12:29:34 INF] Executing OkObjectResult, writing value of type 'WebApplication1.DTOs.AuthResponseDto'.
+[12:29:34 INF] Executed action WebApplication1.Controllers.AuthController.Login (WebApplication1) in 131.7347ms
+[12:29:34 INF] Executed endpoint 'WebApplication1.Controllers.AuthController.Login (WebApplication1)'
+[12:29:34 WRN] HTTP POST /api/Auth/login responded 200 in 137.9631 ms
+[12:29:34 INF] Source:[::1] Request: POST http localhost:5213/api/Auth/login  {"email":"gwenstacy123@gmail.com","password":"Gwen@1123"} Responded with [200] in 140ms
+[12:29:34 INF] Request finished HTTP/1.1 POST http://localhost:5213/api/Auth/login - 200 678 application/json 146.4043ms
+[12:29:34 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/post - null null
+[12:29:34 INF] CORS policy execution successful.
+[12:29:34 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/post - 204 null null 6.3461ms
+[12:29:34 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/post - null null
+[12:29:34 INF] CORS policy execution successful.
+[12:29:34 INF] Executing endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[12:29:34 INF] Route matched with {action = "GetPosts", controller = "Post"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[WebApplication1.DTOs.PostDto]]] GetPosts() on controller WebApplication1.Controllers.PostController (WebApplication1).
+[12:29:34 INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[PostId], [p].[Category], [p].[Content], [p].[CreatedDate], [p].[Title], [p].[UserId], [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Posts] AS [p]
+INNER JOIN [Users] AS [u] ON [p].[UserId] = [u].[Id]
+ORDER BY [p].[CreatedDate] DESC
+[12:29:34 INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[WebApplication1.DTOs.PostDto, WebApplication1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[12:29:34 INF] Executed action WebApplication1.Controllers.PostController.GetPosts (WebApplication1) in 10.7127ms
+[12:29:34 INF] Executed endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[12:29:34 WRN] HTTP GET /api/post responded 200 in 17.5439 ms
+[12:29:34 INF] Source:[::1] Request: GET http localhost:5213/api/post   Responded with [200] in 22ms
+[12:29:34 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/post - 200 19185 application/json 30.6197ms
+[12:31:31 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/post - null null
+[12:31:31 INF] CORS policy execution successful.
+[12:31:31 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/post - 204 null null 5.0829ms
+[12:31:31 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/post - null null
+[12:31:31 INF] CORS policy execution successful.
+[12:31:31 INF] Executing endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[12:31:31 INF] Route matched with {action = "GetPosts", controller = "Post"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[WebApplication1.DTOs.PostDto]]] GetPosts() on controller WebApplication1.Controllers.PostController (WebApplication1).
+[12:31:31 INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[PostId], [p].[Category], [p].[Content], [p].[CreatedDate], [p].[Title], [p].[UserId], [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Posts] AS [p]
+INNER JOIN [Users] AS [u] ON [p].[UserId] = [u].[Id]
+ORDER BY [p].[CreatedDate] DESC
+[12:31:31 INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[WebApplication1.DTOs.PostDto, WebApplication1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[12:31:31 INF] Executed action WebApplication1.Controllers.PostController.GetPosts (WebApplication1) in 11.8496ms
+[12:31:31 INF] Executed endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[12:31:31 WRN] HTTP GET /api/post responded 200 in 18.3082 ms
+[12:31:31 INF] Source:[::1] Request: GET http localhost:5213/api/post   Responded with [200] in 23ms
+[12:31:31 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/post - 200 19185 application/json 30.5765ms
+[12:31:42 INF] Request starting HTTP/1.1 OPTIONS http://localhost:5213/api/post - null null
+[12:31:42 INF] CORS policy execution successful.
+[12:31:42 INF] Request finished HTTP/1.1 OPTIONS http://localhost:5213/api/post - 204 null null 5.215ms
+[12:31:42 INF] Request starting HTTP/1.1 GET http://localhost:5213/api/post - null null
+[12:31:42 INF] CORS policy execution successful.
+[12:31:42 INF] Executing endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[12:31:42 INF] Route matched with {action = "GetPosts", controller = "Post"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[WebApplication1.DTOs.PostDto]]] GetPosts() on controller WebApplication1.Controllers.PostController (WebApplication1).
+[12:31:42 INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[PostId], [p].[Category], [p].[Content], [p].[CreatedDate], [p].[Title], [p].[UserId], [u].[Id], [u].[Email], [u].[Password], [u].[RefreshToken], [u].[RefreshTokenExpiryTime], [u].[Username]
+FROM [Posts] AS [p]
+INNER JOIN [Users] AS [u] ON [p].[UserId] = [u].[Id]
+ORDER BY [p].[CreatedDate] DESC
+[12:31:42 INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[WebApplication1.DTOs.PostDto, WebApplication1, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+[12:31:42 INF] Executed action WebApplication1.Controllers.PostController.GetPosts (WebApplication1) in 10.5434ms
+[12:31:42 INF] Executed endpoint 'WebApplication1.Controllers.PostController.GetPosts (WebApplication1)'
+[12:31:42 WRN] HTTP GET /api/post responded 200 in 18.8249 ms
+[12:31:42 INF] Source:[::1] Request: GET http localhost:5213/api/post   Responded with [200] in 23ms
+[12:31:42 INF] Request finished HTTP/1.1 GET http://localhost:5213/api/post - 200 19185 application/json 29.8965ms
+[12:39:18 INF] Application is shutting down...

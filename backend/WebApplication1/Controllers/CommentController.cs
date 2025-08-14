@@ -10,36 +10,33 @@ using WebApplication1.Services;
 namespace WebApplication1.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1.0")]
     [Authorize]
     public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
+        private readonly ILogger<CommentController> _logger;
 
-        public CommentController(ICommentService commentService)
+        public CommentController(ICommentService commentService, ILogger<CommentController> logger)
         {
             _commentService = commentService;
+            _logger = logger;
         }
 
             //Add a comment
-        [Authorize]
         [HttpPost("{postId}")]
         public async Task<IActionResult> AddComment(string postId, [FromBody] CreateCommentDto dto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            try
-            {
-                var comment = await _commentService.AddCommentAsync(postId, userId, dto.Content);
-                return Ok(comment);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
+            var comment = await _commentService.AddCommentAsync(postId, userId, dto);
+            _logger.LogInformation("Comment added successfully by user {UserId} to post {PostId}", userId, postId);
+
+            return Ok(comment);
+
         }
+        
 
 
         //Delete a comment by ID
@@ -48,15 +45,15 @@ namespace WebApplication1.Controllers
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            try
+            var success = await _commentService.DeleteCommentAsync(commentId, userId);
+            if (!success)
             {
-                var success = await _commentService.DeleteCommentAsync(commentId, userId);
-                return success ? NoContent() : NotFound();
+                _logger.LogWarning("Delete failed: Comment {CommentId} not found or user {UserId} not authorized", commentId, userId);
+                return NotFound(new { message = "Comment not found or not authorized." });
             }
-            catch (UnauthorizedAccessException)
-            {
-                return Forbid();
-            }
+
+            _logger.LogInformation("Comment {CommentId} deleted by user {UserId}", commentId, userId);
+            return NoContent(); 
         }
 
         //Fetch comments for a post
